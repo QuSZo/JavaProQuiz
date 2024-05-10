@@ -21,8 +21,8 @@
   </center>
   <bottom>
     <HBox styleClass="footer">
-      <Button fx:id="nextButton" onAction="#onNextQuestion" text="Next" disable="true"/>
       <Button fx:id="previousButton" onAction="#onPreviousQuestion" text="Previous" disable="true"/>
+      <Button fx:id="nextButton" onAction="#onNextQuestion" text="Next" disable="true"/>
       <Button fx:id="submitButton" onAction="#onSubmit" text="Submit" disable="true"/>
     </HBox>
   </bottom>
