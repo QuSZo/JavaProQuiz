@@ -1,0 +1,29 @@
+.header{
+    -fx-background-color: #2867ff;
+    -fx-padding: 20px;
+}
+
+.header-text{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+}
+
+.main{
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}
+
+.main-questionLabel {
+    -fx-font-size: 14px;
+    -fx-font-weight: bold;
+    -fx-text-fill: #333333;
+}
+
+.main-answersBox {
+    -fx-spacing: 5px;
+}
+
+.footer{
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}

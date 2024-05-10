@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.Label?>
+<?import javafx.scene.layout.VBox?>
+
+<?import javafx.scene.control.Button?>
+
+<?import javafx.scene.layout.BorderPane?>
+<?import javafx.scene.layout.HBox?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.JavaProQuizController" stylesheets="@../css/hello-view.css">
+  <top>
+    <HBox styleClass="header">
+      <Label text="JavaPRO Quiz!" styleClass="header-text"/>
+    </HBox>
+  </top>
+  <center>
+    <VBox styleClass="main">
+      <Label fx:id="questionLabel" styleClass="main-questionLabel"/>
+      <VBox fx:id="answersContainer" styleClass="main-answersBox"/>
+    </VBox>
+  </center>
+  <bottom>
+    <HBox styleClass="footer">
+      <Button fx:id="nextButton" onAction="#onNextQuestion" text="Next" disable="true"/>
+      <Button fx:id="previousButton" onAction="#onPreviousQuestion" text="Previous" disable="true"/>
+      <Button fx:id="submitButton" onAction="#onSubmit" text="Submit" disable="true"/>
+    </HBox>
+  </bottom>
+</BorderPane>
