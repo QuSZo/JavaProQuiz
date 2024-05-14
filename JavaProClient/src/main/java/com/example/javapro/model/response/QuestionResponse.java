@@ -1,13 +1,17 @@
-package com.example.javapro.model;
+package com.example.javapro.model.response;
+
+import com.example.javapro.enums.InputTypeEnum;
 
 import java.util.List;
 
-public class Question {
+public class QuestionResponse {
     private int Id;
+    private InputTypeEnum inputType;
     private String questionText;
     private List<String> answers;
+    private List<Integer> correctAnswers;
 
-    public Question(int Id, String questionText, List<String> answers) {
+    public QuestionResponse(int Id, String questionText, List<String> answers) {
         this.Id = Id;
         this.answers = answers;
         this.questionText = questionText;
@@ -19,6 +23,10 @@ public class Question {
 
     public void setId(int Id) {
         this.Id = Id;
+    }
+
+    public InputTypeEnum getInputType() {
+        return inputType;
     }
 
     public String getQuestionText() {
@@ -35,5 +43,9 @@ public class Question {
 
     public void setAnswers(List<String> answers) {
         this.answers = answers;
+    }
+
+    public List<Integer> getCorrectAnswers() {
+        return correctAnswers;
     }
 }

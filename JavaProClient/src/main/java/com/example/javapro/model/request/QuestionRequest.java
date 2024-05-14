@@ -1,16 +1,16 @@
-package com.example.javapro.model;
+package com.example.javapro.model.request;
 
+import java.util.ArrayList;
 import java.util.List;
 
-public class QuestionResponse {
+public class QuestionRequest {
     private int questionId;
-    private List<Integer> answers;
+    private List<Integer> answers = new ArrayList<>();
 
-    public QuestionResponse() {}
+    public QuestionRequest() {}
 
-    public QuestionResponse(int questionId, List<Integer> answers) {
+    public QuestionRequest(int questionId) {
         this.questionId = questionId;
-        this.answers = answers;
     }
 
     public int getQuestionId() {

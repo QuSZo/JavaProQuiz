@@ -1,0 +1,25 @@
+.header{
+    -fx-background-color: #2867ff;
+    -fx-padding: 20px;
+}
+
+.header-text{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+}
+
+.main{
+    -fx-padding: 20px;
+}
+
+.main-scoreLabel{
+    -fx-font-size: 16px;
+}
+
+/*.main-scoresBox {*/
+/*    -fx-spacing: 5px;*/
+/*}*/
+
+.footer{
+    -fx-padding: 20px;
+}

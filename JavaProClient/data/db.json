@@ -1,0 +1,51 @@
+{
+  "quizzes":[
+    {
+      "id": "1",
+      "name": "Quizz o mnie",
+      "questionResponses": [
+        {
+          "id": "1",
+          "inputType": "0",
+          "questionText": "Jak mam na imię?",
+          "answers": ["Mikołaj", "Krzysiek", "Jakub", "Olek", "Paweł"],
+          "correctAnswers": [1]
+        },
+        {
+          "id": "2",
+          "inputType": "0",
+          "questionText": "Jaki jest mój ulubiony przedmiot?",
+          "answers": ["Java", "Sieci komputerowe", "Systemy wbudowane"],
+          "correctAnswers": [1]
+        },
+        {
+          "id": "3",
+          "inputType": "0",
+          "questionText": "Czy JavaPRO powstała na cześć i chwałę Profesora Jana Prokopa?",
+          "answers": ["Tak", "Nie"],
+          "correctAnswers": [1]
+        },
+        {
+          "id": "4",
+          "inputType": "0",
+          "questionText": "Czy podoba ci się moja aplikacja?",
+          "answers": ["Tak", "Oczywiście", "Jak najbardziej", "Jeszcze jak!"],
+          "correctAnswers": [1]
+        }
+      ]
+    },
+    {
+      "id": "2",
+      "name": "Najlepsza technologia",
+      "questionResponses": [
+        {
+          "id": "1",
+          "inputType": "1",
+          "questionText": "Java vs .NET",
+          "answers": ["Java", ".NET"],
+          "correctAnswers": [1]
+        }
+      ]
+    }
+  ]
+}

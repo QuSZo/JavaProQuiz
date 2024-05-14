@@ -7,7 +7,7 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.JavaProQuizController" stylesheets="@../css/hello-view.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.JavaProQuizController" stylesheets="@../css/QuizSolutionView.css">
   <top>
     <HBox styleClass="header">
       <Label text="JavaPRO Quiz!" styleClass="header-text"/>

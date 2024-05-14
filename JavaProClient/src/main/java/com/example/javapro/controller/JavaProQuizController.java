@@ -1,32 +1,33 @@
 package com.example.javapro.controller;
 
-import com.example.javapro.model.Question;
-import com.example.javapro.model.QuestionResponse;
-import com.example.javapro.model.Quiz;
-import com.example.javapro.model.QuizResponse;
+import com.example.javapro.JavaProQuiz;
+import com.example.javapro.api.AppHttpClient;
+import com.example.javapro.model.response.QuestionResponse;
+import com.example.javapro.model.request.QuestionRequest;
+import com.example.javapro.model.response.QuizResponse;
+import com.example.javapro.model.request.QuizRequest;
 import javafx.event.ActionEvent;
 import javafx.event.EventHandler;
 import javafx.fxml.FXML;
-import javafx.scene.control.Button;
-import javafx.scene.control.CheckBox;
-import javafx.scene.control.Label;
+import javafx.fxml.FXMLLoader;
+import javafx.scene.Node;
+import javafx.scene.Parent;
+import javafx.scene.Scene;
+import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.stage.Stage;
 
+import java.io.IOException;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
 
 public class JavaProQuizController {
-    private Quiz quiz = new Quiz();
     private QuizResponse quizResponse;
+    private QuizRequest quizRequest;
     private int questionCounter = 0;
 
     public JavaProQuizController() {
-        quizSeeder();
-        quizResponse = new QuizResponse(
-                quiz.getId(),
-                new ArrayList<>(quiz.getQuestions().stream().map(question ->
-                        new QuestionResponse(question.getId(), new ArrayList<>())).toList()));
     }
 
     @FXML
@@ -41,7 +42,17 @@ public class JavaProQuizController {
     private VBox answersContainer;
 
     @FXML
-    public void initialize() {
+    public void setParameter(String quizId) {
+        try {
+            quizResponse = AppHttpClient.getQuiz(quizId);
+        }
+        catch (Exception e){
+            throw new RuntimeException(e);
+        }
+
+        quizRequest = new QuizRequest(
+                quizResponse.getId(),
+                quizResponse.getQuestions().stream().map(questionResponse -> new QuestionRequest(questionResponse.getId())).toList());
         displayCurrentQuestion();
     }
 
@@ -58,13 +69,27 @@ public class JavaProQuizController {
     }
 
     @FXML
-    public void onSubmit() {
-        // obsluga wyslania
+    public void onSubmit(ActionEvent event) {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        FXMLLoader fxmlLoader = new FXMLLoader(JavaProQuiz.class.getResource("view/QuizScoreView.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        QuizScoreController controller = fxmlLoader.getController();
+        controller.setParameter(quizResponse, quizRequest);
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root, 600, 400);
+        stage.setScene(scene);
+        stage.show();
     }
 
     private void updateButtonVisibility() {
-        List<Question> questions = quiz.getQuestions();
-        int totalQuestions = questions.size();
+        List<QuestionResponse> questionResponseRespons = quizResponse.getQuestions();
+        int totalQuestions = questionResponseRespons.size();
 
         previousButton.setDisable(!(questionCounter > 0));
         nextButton.setDisable(!(questionCounter < totalQuestions - 1));
@@ -72,47 +97,71 @@ public class JavaProQuizController {
     }
 
     private void displayCurrentQuestion() {
-        Question question = quiz.getQuestions().get(questionCounter);
-        String questionText = question.getQuestionText();
+        QuestionResponse questionResponse = quizResponse.getQuestions().get(questionCounter);
+        String questionText = questionResponse.getQuestionText();
         questionLabel.setText(questionText);
         updateButtonVisibility();
-        displayAnswers(question.getAnswers());
+        displayAnswers(questionResponse);
     }
 
-    private void displayAnswers(List<String> answers) {
+    private void displayAnswers(QuestionResponse questionResponse) {
+        List<String> answers = questionResponse.getAnswers();
         answersContainer.getChildren().clear();
-        QuestionResponse currQuestionResponse = quizResponse.getQuestions().get(questionCounter);
 
+        switch (questionResponse.getInputType()){
+            case RADIO:
+                createRadioButtons(answers);
+                break;
+            case CHECKBOX:
+                createCheckboxes(answers);
+                break;
+        }
+    }
+
+    private void createRadioButtons(List<String> answers){
+        QuestionRequest currQuestionRequest = quizRequest.getQuestions().get(questionCounter);
         int i = 0;
+        final ToggleGroup group = new ToggleGroup();
         for (String answer : answers) {
-            CheckBox checkBox = new CheckBox(answer);
-            checkBox.setSelected(currQuestionResponse.getAnswers().contains(i));
+            RadioButton radio = new RadioButton(answer);
+            radio.setToggleGroup(group);
+            radio.setSelected(currQuestionRequest.getAnswers().contains(i));
 
             int answerNumber = i;
             EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
+                public void handle(ActionEvent e) {
+                    if (radio.isSelected())
+                        currQuestionRequest.setAnswers(Arrays.asList(answerNumber));
+                }
+            };
 
+            radio.setOnAction(event);
+            answersContainer.getChildren().add(radio);
+            i++;
+        }
+    }
+
+    private void createCheckboxes(List<String> answers){
+        QuestionRequest currQuestionRequest = quizRequest.getQuestions().get(questionCounter);
+        int i = 0;
+        for (String answer : answers) {
+            CheckBox checkBox = new CheckBox(answer);
+            checkBox.setSelected(currQuestionRequest.getAnswers().contains(i));
+
+            int answerNumber = i;
+            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
                 public void handle(ActionEvent e)
                 {
                     if (checkBox.isSelected())
-                        currQuestionResponse.getAnswers().add(answerNumber);
+                        currQuestionRequest.getAnswers().add(answerNumber);
                     else
-                        currQuestionResponse.getAnswers().remove(Integer.valueOf(answerNumber));
+                        currQuestionRequest.getAnswers().remove(Integer.valueOf(answerNumber));
                 }
-
             };
 
             checkBox.setOnAction(event);
             answersContainer.getChildren().add(checkBox);
             i++;
         }
-    }
-
-    private void quizSeeder() {
-        Question question1 = new Question(1, "Jak mam na imię?", Arrays.asList("Mikołaj", "Krzysiek", "Jakub", "Olek", "Paweł"));
-        Question question2 = new Question(2, "Jaki jest mój ulubiony przedmiot?", Arrays.asList("Java", "Sieci komputerowe", "Systemy wbudowane"));
-        Question question3 = new Question(3, "Czy JavaPRO powstała na cześć i chwałę Profesora Jana Prokopa?", Arrays.asList("Tak", "Nie"));
-        Question question4 = new Question(4, "Czy podoba ci się moja aplikacja", Arrays.asList("Tak", "Oczywiście", "Jak najbardziej", "Jeszcze jak!"));
-        quiz.setId(1);
-        quiz.setQuestions(Arrays.asList(question1, question2, question3, question4));
     }
 }

@@ -1,0 +1,18 @@
+.header{
+    -fx-background-color: #2867ff;
+    -fx-padding: 20px;
+}
+
+.header-text{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+}
+
+.main{
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}
+
+.main-quizzesBox {
+    -fx-spacing: 5px;
+}
