@@ -1,0 +1,40 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.CreateQuestionController" stylesheets="@../css/CreateQuestionView.css">
+    <top>
+        <HBox styleClass="header">
+            <Label text="JavaPRO Quiz!" styleClass="header-text"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox styleClass="main">
+            <HBox styleClass="main-container">
+                <Label text="Treść pytania: " styleClass="main-nameLabel"/>
+                <TextField fx:id="questionNameTextField"/>
+            </HBox>
+            <HBox styleClass="main-container">
+                <fx:define>
+                    <ToggleGroup fx:id="group" />
+                </fx:define>
+                <RadioButton fx:id="radioIsCheckBox" onAction="#onRadioIsCheckBox" text="Checkbox type" toggleGroup="$group"/>
+                <RadioButton onAction="#onRadioIsRadio" text="Radio type" toggleGroup="$group"/>
+            </HBox>
+            <HBox styleClass="main-container">
+                <Label text="Treść odpowiedzi: " styleClass="main-nameLabel"/>
+                <TextField fx:id="questionAnswerTextField"/>
+                <Button onAction="#onAddAnswer" text="Dodaj odpowiedź"/>
+            </HBox>
+            <VBox fx:id="answersBox" styleClass="main-container">
+            </VBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Cancel"/>
+            <Button onAction="#onSubmit" text="Submit"/>
+        </HBox>
+    </bottom>
+</BorderPane>

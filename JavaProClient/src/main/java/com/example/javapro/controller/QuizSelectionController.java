@@ -69,4 +69,21 @@ public class QuizSelectionController {
             quizzesContainer.getChildren().add(button);
         }
     }
+
+    @FXML
+    private void onCreateQuiz(ActionEvent event) {
+        Stage stage;
+        Scene scene;
+        Parent root;
+        FXMLLoader fxmlLoader = new FXMLLoader(JavaProQuiz.class.getResource("view/CreateQuizView.fxml"));
+        try {
+            root = fxmlLoader.load();
+        } catch (IOException ex) {
+            throw new RuntimeException(ex);
+        }
+        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
+        scene = new Scene(root, 600, 400);
+        stage.setScene(scene);
+        stage.show();
+    }
 }

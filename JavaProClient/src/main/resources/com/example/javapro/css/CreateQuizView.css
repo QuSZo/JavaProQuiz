@@ -1,0 +1,39 @@
+.header{
+    -fx-background-color: #2867ff;
+    -fx-padding: 20px;
+}
+
+.header-text{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+}
+
+.main{
+    -fx-padding: 20px;
+    -fx-spacing: 15px;
+}
+
+.main-nameTextFieldWrapper{
+    -fx-spacing: 5px;
+}
+
+.main-nameLabel{
+    -fx-font-size: 16px;
+}
+
+.main-answerLabel{
+    -fx-font-size: 14px;
+}
+
+.main-questionContainer{
+    -fx-spacing: 0px;
+}
+
+.main-questionsBox{
+    -fx-font-size: 14px;
+}
+
+.footer{
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}

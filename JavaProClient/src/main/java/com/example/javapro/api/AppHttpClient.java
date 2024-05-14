@@ -1,5 +1,7 @@
 package com.example.javapro.api;
 
+import com.example.javapro.model.request.CreateQuizRequest;
+import com.example.javapro.model.response.QuestionResponse;
 import com.example.javapro.model.response.QuizResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
@@ -11,6 +13,7 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.stream.Collectors;
 
 
 public class AppHttpClient {
@@ -56,6 +59,41 @@ public class AppHttpClient {
         } catch (InterruptedException e) {
             e.printStackTrace();
         }
+
+        return quizResponse;
+    }
+
+    public static void createQuiz(CreateQuizRequest createQuizRequest) throws IOException, InterruptedException {
+        QuizResponse quizResponse = mapCreateQuizRequestToQuizResponse(createQuizRequest);
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(quizResponse);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> postResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static QuizResponse mapCreateQuizRequestToQuizResponse(CreateQuizRequest createQuizRequest) {
+        QuizResponse quizResponse = new QuizResponse();
+
+        quizResponse.setId(createQuizRequest.getId());
+        quizResponse.setName(createQuizRequest.getName());
+
+        List<QuestionResponse> questionResponses = createQuizRequest.getCreateQuestionRequests().stream()
+                .map(createQuestionRequest -> {
+                    QuestionResponse questionResponse = new QuestionResponse();
+                    questionResponse.setId(createQuestionRequest.getId());
+                    questionResponse.setQuestionText(createQuestionRequest.getQuestionText());
+                    return questionResponse;
+                })
+                .collect(Collectors.toList());
+
+        quizResponse.setQuestions(questionResponses);
 
         return quizResponse;
     }

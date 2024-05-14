@@ -17,4 +17,9 @@
             <VBox fx:id="quizzesContainer" styleClass="main-quizzesBox"/>
         </VBox>
     </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCreateQuiz" text="Stwórz quiz"/>
+        </HBox>
+    </bottom>
 </BorderPane>

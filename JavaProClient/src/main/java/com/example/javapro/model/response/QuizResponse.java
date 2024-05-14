@@ -22,6 +22,10 @@ public class QuizResponse {
         return name;
     }
 
+    public void setName(String name) {
+        this.name = name;
+    }
+
     public QuizResponse(List<QuestionResponse> questionResponses) {
         this.questionResponses = questionResponses;
     }

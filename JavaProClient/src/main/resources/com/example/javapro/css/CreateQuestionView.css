@@ -10,13 +10,18 @@
 
 .main{
     -fx-padding: 20px;
-    -fx-spacing: 5px;
+    -fx-spacing: 20px;
 }
 
-.main-quizzesBox {
-    -fx-spacing: 5px;
+.main-container{
+    -fx-spacing: 10px;
+}
+
+.main-nameLabel{
+    -fx-font-size: 16px;
 }
 
 .footer{
     -fx-padding: 20px;
+    -fx-spacing: 5px;
 }
