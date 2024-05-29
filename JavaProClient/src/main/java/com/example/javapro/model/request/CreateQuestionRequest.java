@@ -6,19 +6,10 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class CreateQuestionRequest {
-    private int Id;
     private InputTypeEnum inputType;
     private String questionText;
     private List<String> answers = new ArrayList<>();
     private List<Integer> correctAnswers = new ArrayList<>();
-
-    public int getId() {
-        return Id;
-    }
-
-    public void setId(int Id) {
-        this.Id = Id;
-    }
 
     public InputTypeEnum getInputType() {
         return inputType;

@@ -10,6 +10,11 @@ public class QuizResponse {
     public QuizResponse() {
     }
 
+    public QuizResponse(String name, List<QuestionResponse> questionResponses) {
+        this.name = name;
+        this.questionResponses = questionResponses;
+    }
+
     public String getId() {
         return id;
     }

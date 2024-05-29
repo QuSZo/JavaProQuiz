@@ -16,7 +16,7 @@
             "Paweł"
           ],
           "correctAnswers": [
-            1
+            0
           ]
         },
         {
@@ -29,23 +29,11 @@
             "Systemy wbudowane"
           ],
           "correctAnswers": [
-            1
+            0
           ]
         },
         {
           "id": "3",
-          "inputType": "0",
-          "questionText": "Czy JavaPRO powstała na cześć i chwałę Profesora Jana Prokopa?",
-          "answers": [
-            "Tak",
-            "Nie"
-          ],
-          "correctAnswers": [
-            1
-          ]
-        },
-        {
-          "id": "4",
           "inputType": "0",
           "questionText": "Czy podoba ci się moja aplikacja?",
           "answers": [
@@ -55,7 +43,7 @@
             "Jeszcze jak!"
           ],
           "correctAnswers": [
-            1
+            0,1,2,3
           ]
         }
       ]
@@ -70,25 +58,11 @@
           "questionText": "Java vs .NET",
           "answers": [
             "Java",
-            ".NET"
+            "PHP"
           ],
           "correctAnswers": [
-            1
+            0
           ]
-        }
-      ]
-    },
-    {
-      "id": "40ad",
-      "name": "Dupa",
-      "questionResponses": [
-        {
-          "Id": 0,
-          "questionText": "dupa"
-        },
-        {
-          "Id": 0,
-          "questionText": "cipa"
         }
       ]
     }

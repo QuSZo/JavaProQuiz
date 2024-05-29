@@ -5,7 +5,7 @@ import com.example.javapro.enums.InputTypeEnum;
 import java.util.List;
 
 public class QuestionResponse {
-    private int Id;
+    private String Id;
     private InputTypeEnum inputType;
     private String questionText;
     private List<String> answers;
@@ -13,17 +13,19 @@ public class QuestionResponse {
 
     public QuestionResponse (){}
 
-    public QuestionResponse(int Id, String questionText, List<String> answers) {
-        this.Id = Id;
-        this.answers = answers;
+    public QuestionResponse(String id, InputTypeEnum inputType, String questionText, List<String> answers, List<Integer> correctAnswers) {
+        this.Id = id;
+        this.inputType = inputType;
         this.questionText = questionText;
+        this.answers = answers;
+        this.correctAnswers = correctAnswers;
     }
 
-    public int getId() {
+    public String getId() {
         return Id;
     }
 
-    public void setId(int Id) {
+    public void setId(String Id) {
         this.Id = Id;
     }
 

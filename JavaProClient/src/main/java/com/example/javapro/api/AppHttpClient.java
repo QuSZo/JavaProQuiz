@@ -79,21 +79,15 @@ public class AppHttpClient {
     }
 
     public static QuizResponse mapCreateQuizRequestToQuizResponse(CreateQuizRequest createQuizRequest) {
-        QuizResponse quizResponse = new QuizResponse();
-
-        quizResponse.setId(createQuizRequest.getId());
-        quizResponse.setName(createQuizRequest.getName());
-
         List<QuestionResponse> questionResponses = createQuizRequest.getCreateQuestionRequests().stream()
-                .map(createQuestionRequest -> {
-                    QuestionResponse questionResponse = new QuestionResponse();
-                    questionResponse.setId(createQuestionRequest.getId());
-                    questionResponse.setQuestionText(createQuestionRequest.getQuestionText());
-                    return questionResponse;
-                })
-                .collect(Collectors.toList());
-
-        quizResponse.setQuestions(questionResponses);
+                .map(createQuestionRequest -> new QuestionResponse(
+                            String.valueOf(createQuizRequest.getCreateQuestionRequests().indexOf(createQuestionRequest)),
+                            createQuestionRequest.getInputType(),
+                            createQuestionRequest.getQuestionText(),
+                            createQuestionRequest.getAnswers(),
+                            createQuestionRequest.getCorrectAnswers()))
+                .toList();
+        QuizResponse quizResponse = new QuizResponse(createQuizRequest.getName(), questionResponses);
 
         return quizResponse;
     }

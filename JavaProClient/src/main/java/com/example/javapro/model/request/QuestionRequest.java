@@ -4,21 +4,15 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class QuestionRequest {
-    private int questionId;
+    private String questionId;
     private List<Integer> answers = new ArrayList<>();
 
     public QuestionRequest() {}
 
-    public QuestionRequest(int questionId) {
+    public QuestionRequest(String questionId) {
         this.questionId = questionId;
     }
 
-    public int getQuestionId() {
-        return questionId;
-    }
-    public void setQuestionId(int questionId) {
-        this.questionId = questionId;
-    }
     public List<Integer> getAnswers() {
         return answers;
     }
