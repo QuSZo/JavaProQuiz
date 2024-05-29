@@ -2,16 +2,14 @@ package com.example.javapro.controller;
 
 import com.example.javapro.JavaProQuiz;
 import com.example.javapro.api.AppHttpClient;
-import com.example.javapro.model.request.CreateQuestionRequest;
-import com.example.javapro.model.request.CreateQuizRequest;
-import com.example.javapro.model.response.QuestionResponse;
+import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
+import com.example.javapro.model.request.createQuiz.CreateQuizRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
 import javafx.scene.Parent;
 import javafx.scene.Scene;
-import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;

@@ -1,14 +1,14 @@
-package com.example.javaproserver.models.DTOs;
+package com.example.javaproserver.models.DTOs.requests;
 
 import java.util.List;
 import java.util.UUID;
 
-public class UpdateQuizDto {
+public class UpdateQuizRequest {
     private UUID id;
     private String title;
-    private List<UpdateQuestionDto> questions;
+    private List<UpdateQuestionRequest> questions;
 
-    public UpdateQuizDto() {
+    public UpdateQuizRequest() {
     }
 
     public UUID getId() {
@@ -27,11 +27,11 @@ public class UpdateQuizDto {
         this.title = title;
     }
 
-    public List<UpdateQuestionDto> getQuestions() {
+    public List<UpdateQuestionRequest> getQuestions() {
         return questions;
     }
 
-    public void setQuestions(List<UpdateQuestionDto> questions) {
+    public void setQuestions(List<UpdateQuestionRequest> questions) {
         this.questions = questions;
     }
 }

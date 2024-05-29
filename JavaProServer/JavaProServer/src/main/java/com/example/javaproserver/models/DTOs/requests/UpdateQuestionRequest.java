@@ -1,17 +1,17 @@
-package com.example.javaproserver.models.DTOs;
+package com.example.javaproserver.models.DTOs.requests;
 
 import com.example.javaproserver.enums.InputTypeEnum;
 
 import java.util.List;
 import java.util.UUID;
 
-public class UpdateQuestionDto {
+public class UpdateQuestionRequest {
     private UUID id;
     private InputTypeEnum inputType;
     private String text;
-    private List<UpdateAnswerDto> answers;
+    private List<UpdateAnswerRequest> answers;
 
-    public UpdateQuestionDto() {
+    public UpdateQuestionRequest() {
     }
 
     public UUID getId() {
@@ -38,11 +38,11 @@ public class UpdateQuestionDto {
         this.text = text;
     }
 
-    public List<UpdateAnswerDto> getAnswers() {
+    public List<UpdateAnswerRequest> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<UpdateAnswerDto> answers) {
+    public void setAnswers(List<UpdateAnswerRequest> answers) {
         this.answers = answers;
     }
 }

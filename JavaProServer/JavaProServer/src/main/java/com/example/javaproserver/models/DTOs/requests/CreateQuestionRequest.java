@@ -1,15 +1,15 @@
-package com.example.javaproserver.models.DTOs;
+package com.example.javaproserver.models.DTOs.requests;
 
 import com.example.javaproserver.enums.InputTypeEnum;
 
 import java.util.List;
 
-public class CreateQuestionDto {
+public class CreateQuestionRequest {
     private InputTypeEnum inputType;
     private String text;
-    private List<CreateAnswerDto> answers;
+    private List<CreateAnswerRequest> answers;
 
-    public CreateQuestionDto() {
+    public CreateQuestionRequest() {
     }
 
     public InputTypeEnum getInputType() {
@@ -28,11 +28,11 @@ public class CreateQuestionDto {
         this.text = text;
     }
 
-    public List<CreateAnswerDto> getAnswers() {
+    public List<CreateAnswerRequest> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<CreateAnswerDto> answers) {
-        this.answers = answers;
+    public void setAnswers(List<CreateAnswerRequest> createAnswerRequests) {
+        this.answers = createAnswerRequests;
     }
 }

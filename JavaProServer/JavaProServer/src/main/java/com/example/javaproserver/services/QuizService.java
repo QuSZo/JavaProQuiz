@@ -1,18 +1,21 @@
 package com.example.javaproserver.services;
 
-import com.example.javaproserver.models.DTOs.CreateQuizDto;
-import com.example.javaproserver.models.DTOs.UpdateAnswerDto;
-import com.example.javaproserver.models.DTOs.UpdateQuestionDto;
-import com.example.javaproserver.models.DTOs.UpdateQuizDto;
+import com.example.javaproserver.models.DTOs.requests.CreateQuizRequest;
+import com.example.javaproserver.models.DTOs.requests.UpdateAnswerRequest;
+import com.example.javaproserver.models.DTOs.requests.UpdateQuestionRequest;
+import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
+import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.entities.Answer;
 import com.example.javaproserver.models.entities.Question;
 import com.example.javaproserver.models.entities.Quiz;
 import com.example.javaproserver.repositories.QuizRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
+import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
@@ -28,11 +31,17 @@ public class QuizService {
         this.modelMapper = modelMapper;
     }
 
-    public List<Quiz> getQuizzes(){
-        return quizRepository.findAll();
+    public List<GetQuizResponse> getQuizzes(){
+        List<Quiz> quizzes = quizRepository.findAll();
+        List<GetQuizResponse> responses = modelMapper.map(quizzes, new TypeToken<List<GetQuizResponse>>() {}.getType());
+        return responses;
     }
 
-    public void addQuiz(CreateQuizDto quiz){
+    public Quiz getQuiz(UUID id) {
+        return quizRepository.findById(id).orElse(null);
+    }
+
+    public void addQuiz(CreateQuizRequest quiz){
         Quiz quizToAdd = modelMapper.map(quiz, Quiz.class);
         quizRepository.save(quizToAdd);
     }
@@ -46,7 +55,7 @@ public class QuizService {
     }
 
     @Transactional
-    public Quiz updateQuiz(UpdateQuizDto quizDTO) {
+    public Quiz updateQuiz(UpdateQuizRequest quizDTO) {
         boolean exists = quizRepository.existsById(quizDTO.getId());
         if (!exists) {
             throw new IllegalArgumentException("Quiz with id " + quizDTO.getId() + " does not exist");
@@ -56,12 +65,12 @@ public class QuizService {
         quizToUpdate.setTitle(quizDTO.getTitle());
         quizToUpdate.getQuestions().clear();
 
-        for (UpdateQuestionDto questionDTO : quizDTO.getQuestions()) {
+        for (UpdateQuestionRequest questionDTO : quizDTO.getQuestions()) {
             Question question = new Question();
             question.setText(questionDTO.getText());
             question.setInputType(questionDTO.getInputType());
 
-            for (UpdateAnswerDto answerDTO : questionDTO.getAnswers()) {
+            for (UpdateAnswerRequest answerDTO : questionDTO.getAnswers()) {
                 Answer answer = new Answer();
                 answer.setText(answerDTO.getText());
                 answer.setCorrect(answerDTO.isCorrect());

@@ -2,7 +2,8 @@ package com.example.javapro.controller;
 
 import com.example.javapro.JavaProQuiz;
 import com.example.javapro.enums.InputTypeEnum;
-import com.example.javapro.model.request.CreateQuestionRequest;
+import com.example.javapro.model.request.createQuiz.CreateAnswerRequest;
+import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
@@ -117,14 +118,14 @@ public class CreateQuestionController {
     }
 
     private void createCheckboxesForAnswers() {
-        createQuestionRequest.getAnswers().add(questionAnswerTextField.getText());
+        createQuestionRequest.getAnswers().add(new CreateAnswerRequest(questionAnswerTextField.getText()));
         answerCheckBoxes.add(new CheckBox());
         questionAnswerTextField.clear();
         displayAnswers();
     }
 
     private void createRadioButtonsForAnswers() {
-        createQuestionRequest.getAnswers().add(questionAnswerTextField.getText());
+        createQuestionRequest.getAnswers().add(new CreateAnswerRequest(questionAnswerTextField.getText()));
         answerRadioButtons.add(new RadioButton());
         questionAnswerTextField.clear();
         displayAnswers();
@@ -135,7 +136,7 @@ public class CreateQuestionController {
         ToggleGroup toggleGroup = new ToggleGroup();
         for(int i=0; i<createQuestionRequest.getAnswers().size(); i++) {
             HBox hbox = new HBox(5);
-            Label answerLabel = new Label(i + 1 + ". " + createQuestionRequest.getAnswers().get(i));
+            Label answerLabel = new Label(i + 1 + ". " + createQuestionRequest.getAnswers().get(i).getText());
             if(inputTypeEnum==InputTypeEnum.CHECKBOX)
                 hbox.getChildren().addAll(answerLabel, answerCheckBoxes.get(i));
             else if(inputTypeEnum==InputTypeEnum.RADIO) {
@@ -151,14 +152,14 @@ public class CreateQuestionController {
             case CHECKBOX:
                 for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
                     if (answerCheckBoxes.get(i).isSelected()) {
-                        createQuestionRequest.getCorrectAnswers().add(i);
+                        createQuestionRequest.getAnswers().get(i).setCorrect(true);
                     }
                 }
                 break;
             case RADIO:
                 for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
                     if (answerRadioButtons.get(i).isSelected()) {
-                        createQuestionRequest.getCorrectAnswers().add(i);
+                        createQuestionRequest.getAnswers().get(i).setCorrect(true);
                     }
                 }
                 break;

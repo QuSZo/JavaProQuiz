@@ -1,6 +1,5 @@
 package com.example.javaproserver.models.entities;
 
-import com.example.javaproserver.models.DTOs.UpdateQuizDto;
 import jakarta.persistence.*;
 
 import java.util.ArrayList;

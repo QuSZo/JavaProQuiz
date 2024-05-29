@@ -1,10 +1,10 @@
-package com.example.javaproserver.models.DTOs;
+package com.example.javaproserver.models.DTOs.requests;
 
-public class CreateAnswerDto {
+public class CreateAnswerRequest {
     private String text;
     private boolean isCorrect;
 
-    public CreateAnswerDto() {
+    public CreateAnswerRequest() {
     }
 
     public boolean isCorrect() {

@@ -2,12 +2,13 @@ package com.example.javapro.controller;
 
 import com.example.javapro.JavaProQuiz;
 import com.example.javapro.api.AppHttpClient;
-import com.example.javapro.model.response.QuestionResponse;
-import com.example.javapro.model.request.QuestionRequest;
-import com.example.javapro.model.response.QuizResponse;
-import com.example.javapro.model.request.QuizRequest;
+import com.example.javapro.model.request.userQuiz.UserAnswerRequest;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsAnswerResponse;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuestionResponse;
+import com.example.javapro.model.request.userQuiz.UserQuestionRequest;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
+import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import javafx.event.ActionEvent;
-import javafx.event.EventHandler;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.Node;
@@ -19,13 +20,14 @@ import javafx.stage.Stage;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Arrays;
 import java.util.List;
 
 public class JavaProQuizController {
-    private QuizResponse quizResponse;
-    private QuizRequest quizRequest;
+    private GetDetailsQuizResponse getDetailsQuizResponse;
+    private UserQuizRequest userQuizRequest;
     private int questionCounter = 0;
+    private List<CheckBox> answerCheckBoxes = new ArrayList<>();
+    private List<RadioButton> answerRadioButtons = new ArrayList<>();
 
     public JavaProQuizController() {
     }
@@ -44,15 +46,22 @@ public class JavaProQuizController {
     @FXML
     public void setParameter(String quizId) {
         try {
-            quizResponse = AppHttpClient.getQuiz(quizId);
+            getDetailsQuizResponse = AppHttpClient.getQuiz(quizId);
         }
         catch (Exception e){
             throw new RuntimeException(e);
         }
 
-        quizRequest = new QuizRequest(
-                quizResponse.getId(),
-                quizResponse.getQuestions().stream().map(questionResponse -> new QuestionRequest(questionResponse.getId())).toList());
+        userQuizRequest = new UserQuizRequest(
+                getDetailsQuizResponse.getId(),
+                getDetailsQuizResponse.getQuestions().stream().map(getDetailsQuestionResponse ->
+                        new UserQuestionRequest(
+                                getDetailsQuestionResponse.getId(),
+                                getDetailsQuestionResponse.getAnswers().stream().map(getDetailsAnswerResponse ->
+                                        new UserAnswerRequest(
+                                                getDetailsAnswerResponse.getId(),
+                                                false
+                                        )).toList())).toList());
         displayCurrentQuestion();
     }
 
@@ -80,7 +89,7 @@ public class JavaProQuizController {
             throw new RuntimeException(ex);
         }
         QuizScoreController controller = fxmlLoader.getController();
-        controller.setParameter(quizResponse, quizRequest);
+        controller.setParameter(getDetailsQuizResponse, userQuizRequest);
         stage = (Stage)((Node)event.getSource()).getScene().getWindow();
         scene = new Scene(root, 600, 400);
         stage.setScene(scene);
@@ -88,8 +97,8 @@ public class JavaProQuizController {
     }
 
     private void updateButtonVisibility() {
-        List<QuestionResponse> questionResponseRespons = quizResponse.getQuestions();
-        int totalQuestions = questionResponseRespons.size();
+        List<GetDetailsQuestionResponse> getDetailsQuestionResponseRespons = getDetailsQuizResponse.getQuestions();
+        int totalQuestions = getDetailsQuestionResponseRespons.size();
 
         previousButton.setDisable(!(questionCounter > 0));
         nextButton.setDisable(!(questionCounter < totalQuestions - 1));
@@ -97,18 +106,18 @@ public class JavaProQuizController {
     }
 
     private void displayCurrentQuestion() {
-        QuestionResponse questionResponse = quizResponse.getQuestions().get(questionCounter);
-        String questionText = questionResponse.getQuestionText();
+        GetDetailsQuestionResponse getDetailsQuestionResponse = getDetailsQuizResponse.getQuestions().get(questionCounter);
+        String questionText = getDetailsQuestionResponse.getText();
         questionLabel.setText(questionText);
         updateButtonVisibility();
-        displayAnswers(questionResponse);
+        displayAnswers(getDetailsQuestionResponse);
     }
 
-    private void displayAnswers(QuestionResponse questionResponse) {
-        List<String> answers = questionResponse.getAnswers();
+    private void displayAnswers(GetDetailsQuestionResponse getDetailsQuestionResponse) {
+        List<GetDetailsAnswerResponse> answers = getDetailsQuestionResponse.getAnswers();
         answersContainer.getChildren().clear();
 
-        switch (questionResponse.getInputType()){
+        switch (getDetailsQuestionResponse.getInputType()){
             case RADIO:
                 createRadioButtons(answers);
                 break;
@@ -118,50 +127,34 @@ public class JavaProQuizController {
         }
     }
 
-    private void createRadioButtons(List<String> answers){
-        QuestionRequest currQuestionRequest = quizRequest.getQuestions().get(questionCounter);
-        int i = 0;
+    private void createRadioButtons(List<GetDetailsAnswerResponse> answers){
+        UserQuestionRequest currUserQuestionRequest = userQuizRequest.getQuestions().get(questionCounter);
+
+        for(int i = 0; i < answers.size(); i++) {
+            answerRadioButtons.add(new RadioButton(answers.get(i).getText()));
+        }
+
         final ToggleGroup group = new ToggleGroup();
-        for (String answer : answers) {
-            RadioButton radio = new RadioButton(answer);
-            radio.setToggleGroup(group);
-            radio.setSelected(currQuestionRequest.getAnswers().contains(i));
+        for (int i = 0; i < answers.size(); i++) {
+            answerRadioButtons.get(i).setToggleGroup(group);
+            answerRadioButtons.get(i).setSelected(currUserQuestionRequest.getAnswers().get(i).isCorrect());
 
-            int answerNumber = i;
-            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent e) {
-                    if (radio.isSelected())
-                        currQuestionRequest.setAnswers(Arrays.asList(answerNumber));
-                }
-            };
-
-            radio.setOnAction(event);
-            answersContainer.getChildren().add(radio);
-            i++;
+            answersContainer.getChildren().add(answerRadioButtons.get(i));
         }
     }
 
-    private void createCheckboxes(List<String> answers){
-        QuestionRequest currQuestionRequest = quizRequest.getQuestions().get(questionCounter);
-        int i = 0;
-        for (String answer : answers) {
-            CheckBox checkBox = new CheckBox(answer);
-            checkBox.setSelected(currQuestionRequest.getAnswers().contains(i));
+    private void createCheckboxes(List<GetDetailsAnswerResponse> answers){
+        UserQuestionRequest currUserQuestionRequest = userQuizRequest.getQuestions().get(questionCounter);
 
-            int answerNumber = i;
-            EventHandler<ActionEvent> event = new EventHandler<ActionEvent>() {
-                public void handle(ActionEvent e)
-                {
-                    if (checkBox.isSelected())
-                        currQuestionRequest.getAnswers().add(answerNumber);
-                    else
-                        currQuestionRequest.getAnswers().remove(Integer.valueOf(answerNumber));
-                }
-            };
+        for(int i = 0; i < answers.size(); i++) {
+            answerCheckBoxes.add(new CheckBox(answers.get(i).getText()));
+        }
 
-            checkBox.setOnAction(event);
-            answersContainer.getChildren().add(checkBox);
-            i++;
+        final ToggleGroup group = new ToggleGroup();
+        for (int i = 0; i < answers.size(); i++) {
+            answerCheckBoxes.get(i).setSelected(currUserQuestionRequest.getAnswers().get(i).isCorrect());
+
+            answersContainer.getChildren().add(answerCheckBoxes.get(i));
         }
     }
 }

@@ -1,7 +1,8 @@
 package com.example.javaproserver.controllers;
 
-import com.example.javaproserver.models.DTOs.CreateQuizDto;
-import com.example.javaproserver.models.DTOs.UpdateQuizDto;
+import com.example.javaproserver.models.DTOs.requests.CreateQuizRequest;
+import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
+import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.entities.Quiz;
 import com.example.javaproserver.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -22,12 +23,17 @@ public class QuizController {
     }
 
     @GetMapping
-    public List<Quiz> getQuizzes() {
+    public List<GetQuizResponse> getQuizzes() {
         return quizService.getQuizzes();
     }
 
+    @GetMapping(path = "{quizId}")
+    public Quiz getQuizzes(@PathVariable("quizId") UUID id) {
+        return quizService.getQuiz(id);
+    }
+
     @PostMapping
-    public void createQuiz(@RequestBody CreateQuizDto quiz) {
+    public void createQuiz(@RequestBody CreateQuizRequest quiz) {
         quizService.addQuiz(quiz);
     }
 
@@ -37,7 +43,7 @@ public class QuizController {
     }
 
     @PutMapping()
-    public void updateQuiz(@RequestBody UpdateQuizDto quiz) {
+    public void updateQuiz(@RequestBody UpdateQuizRequest quiz) {
         quizService.updateQuiz(quiz);
     }
 }

@@ -1,21 +1,20 @@
-package com.example.javaproserver.models.DTOs;
+package com.example.javapro.model.request.createQuiz;
 
-import java.util.UUID;
-
-public class UpdateAnswerDto {
-    private UUID id;
+public class CreateAnswerRequest {
     private String text;
     private boolean isCorrect;
 
-    public UpdateAnswerDto() {
+    public CreateAnswerRequest() {
     }
 
-    public UUID getId() {
-        return id;
+    public CreateAnswerRequest(String text) {
+        this.text = text;
+        this.isCorrect = false;
     }
 
-    public void setId(UUID id) {
-        this.id = id;
+    public CreateAnswerRequest(String text, boolean isCorrect) {
+        this.text = text;
+        this.isCorrect = isCorrect;
     }
 
     public String getText() {
