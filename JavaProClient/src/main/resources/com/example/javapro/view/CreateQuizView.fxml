@@ -13,20 +13,19 @@
         <VBox styleClass="main">
             <HBox styleClass="main-nameTextFieldWrapper">
                 <Label text="Nazwa: " styleClass="main-nameLabel"/>
-                <TextField fx:id="quizNameTextField"/>
+                <TextField fx:id="quizNameTextField" onKeyTyped="#onQuizNameTyped"/>
             </HBox>
             <Button onAction="#onCreateQuestion" text="Dodaj pytanie"/>
             <VBox styleClass="main-questionContainer">
                 <Label text="Pytania:" styleClass="main-answerLabel"/>
                 <VBox fx:id="questionsBox" styleClass="main-questionsBox"/>
             </VBox>
-
         </VBox>
     </center>
     <bottom>
         <HBox styleClass="footer">
-            <Button onAction="#onCancel" text="Cancel"/>
-            <Button onAction="#onSubmit" text="Submit"/>
+            <Button onAction="#onCancel" text="Anuluj"/>
+            <Button fx:id="submitButton" onAction="#onSubmit" text="Zatwierdź" disable="true"/>
         </HBox>
     </bottom>
 </BorderPane>

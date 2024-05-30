@@ -1,22 +1,20 @@
 package com.example.javapro.controller;
 
-import com.example.javapro.JavaProQuiz;
 import com.example.javapro.api.AppHttpClient;
 import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
 import com.example.javapro.model.request.createQuiz.CreateQuizRequest;
+import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
-import javafx.fxml.FXMLLoader;
-import javafx.scene.Node;
-import javafx.scene.Parent;
-import javafx.scene.Scene;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
 import javafx.scene.control.TextField;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
-import javafx.stage.Stage;
 
 import java.io.IOException;
+
+import static com.example.javapro.scene.LoadView.loadCreateQuestionView;
 
 public class CreateQuizController {
 
@@ -29,6 +27,7 @@ public class CreateQuizController {
 
     public void setParameter(CreateQuestionRequest createQuestionRequest){
         createQuizRequest.getCreateQuestionRequests().add(createQuestionRequest);
+        tryActiveSubmit();
         displayQuestion();
     }
 
@@ -36,62 +35,40 @@ public class CreateQuizController {
     private TextField quizNameTextField;
 
     @FXML
+    public Button submitButton;
+
+    @FXML
     private VBox questionsBox;
+
+    @FXML
+    private void onQuizNameTyped(){
+        tryActiveSubmit();
+    }
 
     @FXML
     private void onCreateQuestion(ActionEvent event) throws IOException {
         createQuizRequest.setName(quizNameTextField.getText());
-        Stage stage;
-        Scene scene;
-        Parent root;
-        FXMLLoader fxmlLoader = new FXMLLoader(JavaProQuiz.class.getResource("view/CreateQuestionView.fxml"));
-        try {
-            root = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root, 600, 400);
-        stage.setScene(scene);
-        stage.show();
+        loadCreateQuestionView();
     }
 
     @FXML
     private void onCancel(ActionEvent event){
         createQuizRequest = new CreateQuizRequest();
-        Stage stage;
-        Scene scene;
-        Parent root;
-        FXMLLoader fxmlLoader = new FXMLLoader(JavaProQuiz.class.getResource("view/QuizSelectionView.fxml"));
-        try {
-            root = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root, 600, 400);
-        stage.setScene(scene);
-        stage.show();
+        LoadView.loadQuizSelectionView();
     }
 
     @FXML
     private void onSubmit(ActionEvent event) throws IOException, InterruptedException {
         createQuizRequest.setName(quizNameTextField.getText());
         AppHttpClient.createQuiz(createQuizRequest);
-        Stage stage;
-        Scene scene;
-        Parent root;
-        FXMLLoader fxmlLoader = new FXMLLoader(JavaProQuiz.class.getResource("view/QuizSelectionView.fxml"));
-        try {
-            root = fxmlLoader.load();
-        } catch (IOException ex) {
-            throw new RuntimeException(ex);
-        }
-        stage = (Stage)((Node)event.getSource()).getScene().getWindow();
-        scene = new Scene(root, 600, 400);
-        stage.setScene(scene);
-        stage.show();
+        LoadView.loadQuizSelectionView();
         createQuizRequest = new CreateQuizRequest();
+    }
+
+    private void tryActiveSubmit(){
+        submitButton.setDisable(quizNameTextField.getText() == null ||
+                                quizNameTextField.getText().isBlank() ||
+                                createQuizRequest.getCreateQuestionRequests().isEmpty());
     }
 
     private void displayQuestion(){

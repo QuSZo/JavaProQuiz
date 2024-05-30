@@ -20,7 +20,7 @@
     </center>
     <bottom>
         <HBox styleClass="footer">
-            <Button onAction="#onSubmit" text="Submit"/>
+            <Button onAction="#onSubmit" text="Zatwierdź"/>
         </HBox>
     </bottom>
 </BorderPane>

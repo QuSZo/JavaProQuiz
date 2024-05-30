@@ -13,7 +13,7 @@
         <VBox styleClass="main">
             <HBox styleClass="main-container">
                 <Label text="Treść pytania: " styleClass="main-nameLabel"/>
-                <TextField fx:id="questionNameTextField"/>
+                <TextField fx:id="questionNameTextField" onKeyTyped="#onQuestionNameTyped"/>
             </HBox>
             <HBox styleClass="main-container">
                 <fx:define>
@@ -24,8 +24,8 @@
             </HBox>
             <HBox styleClass="main-container">
                 <Label text="Treść odpowiedzi: " styleClass="main-nameLabel"/>
-                <TextField fx:id="questionAnswerTextField"/>
-                <Button onAction="#onAddAnswer" text="Dodaj odpowiedź"/>
+                <TextField fx:id="questionAnswerTextField" onKeyTyped="#onQuestionAnswerTyped"/>
+                <Button fx:id="addAnswerButton" onAction="#onAddAnswer" text="Dodaj odpowiedź" disable="true"/>
             </HBox>
             <VBox fx:id="answersBox" styleClass="main-container">
             </VBox>
@@ -33,8 +33,8 @@
     </center>
     <bottom>
         <HBox styleClass="footer">
-            <Button onAction="#onCancel" text="Cancel"/>
-            <Button onAction="#onSubmit" text="Submit"/>
+            <Button onAction="#onCancel" text="Anuluj"/>
+            <Button fx:id="submitButton" onAction="#onSubmit" text="Zatwierdź" disable="true"/>
         </HBox>
     </bottom>
 </BorderPane>
