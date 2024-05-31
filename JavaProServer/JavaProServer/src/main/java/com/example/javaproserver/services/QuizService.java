@@ -63,6 +63,8 @@ public class QuizService {
         Quiz quizToUpdate = quizRepository.findById(quizDTO.getId()).get();
 
         quizToUpdate.setTitle(quizDTO.getTitle());
+        quizToUpdate.setDescription(quizDTO.getDescription());
+        quizToUpdate.setQuizTime(quizDTO.getQuizTime());
         quizToUpdate.getQuestions().clear();
 
         for (UpdateQuestionRequest questionDTO : quizDTO.getQuestions()) {

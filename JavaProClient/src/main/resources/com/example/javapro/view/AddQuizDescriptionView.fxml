@@ -1,0 +1,21 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.AddQuizDescriptionController" stylesheets="@../css/AddQuizDescriptionView.css">
+    <top>
+        <HBox styleClass="header">
+            <Label text="JavaPRO Quiz!" styleClass="header-text"/>
+        </HBox>
+    </top>
+    <center>
+        <TextArea fx:id="quizDescriptionTextField" styleClass="main"/>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Anuluj"/>
+            <Button onAction="#onSubmit" text="Zatwierdź"/>
+        </HBox>
+    </bottom>
+</BorderPane>

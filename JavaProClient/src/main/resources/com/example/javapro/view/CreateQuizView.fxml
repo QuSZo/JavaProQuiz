@@ -15,9 +15,15 @@
                 <Label text="Nazwa: " styleClass="main-nameLabel"/>
                 <TextField fx:id="quizNameTextField" onKeyTyped="#onQuizNameTyped"/>
             </HBox>
-            <Button onAction="#onCreateQuestion" text="Dodaj pytanie"/>
+            <HBox styleClass="main-nameTextFieldWrapper">
+                <Label text="Czas trwania (min): " styleClass="main-nameLabel"/>
+                <TextField fx:id="quizTimeTextField" onKeyTyped="#onQuizTimeTyped"/>
+            </HBox>
+            <HBox styleClass="main-nameTextFieldWrapper">
+                <Button onAction="#onCreateQuestion" text="Dodaj pytanie"/>
+                <Button onAction="#onEditQuizDescription" text="Opis Quizu"/>
+            </HBox>
             <VBox styleClass="main-questionContainer">
-                <Label text="Pytania:" styleClass="main-answerLabel"/>
                 <VBox fx:id="questionsBox" styleClass="main-questionsBox"/>
             </VBox>
         </VBox>

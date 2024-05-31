@@ -10,11 +10,11 @@
 
 .main{
     -fx-padding: 20px;
-    -fx-spacing: 15px;
+    -fx-spacing: 20px;
 }
 
 .main-nameTextFieldWrapper{
-    -fx-spacing: 5px;
+    -fx-spacing: 10px;
 }
 
 .main-nameLabel{
@@ -26,11 +26,11 @@
 }
 
 .main-questionContainer{
-    -fx-spacing: 0px;
+
 }
 
 .main-questionsBox{
-    -fx-font-size: 14px;
+    -fx-spacing: 10px;
 }
 
 .footer{

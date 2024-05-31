@@ -1,0 +1,20 @@
+.header{
+    -fx-background-color: #2867ff;
+    -fx-padding: 20px;
+}
+
+.header-text{
+    -fx-text-fill: #FFFFFF;
+    -fx-font-size: 24px;
+}
+
+.main{
+    -fx-padding: 20px 20px 0 20px;
+    -fx-border-insets: 20px 20px 0 20px;
+    -fx-background-insets: 20px 20px 0 20px;
+}
+
+.footer{
+    -fx-padding: 20px;
+    -fx-spacing: 5px;
+}

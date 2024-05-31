@@ -6,6 +6,8 @@ import java.util.UUID;
 public class UpdateQuizRequest {
     private UUID id;
     private String title;
+    private int quizTime;
+    private String description;
     private List<UpdateQuestionRequest> questions;
 
     public UpdateQuizRequest() {
@@ -25,6 +27,22 @@ public class UpdateQuizRequest {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuizTime() {
+        return quizTime;
+    }
+
+    public void setQuizTime(int quizTime) {
+        this.quizTime = quizTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<UpdateQuestionRequest> getQuestions() {

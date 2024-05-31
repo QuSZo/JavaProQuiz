@@ -14,6 +14,8 @@ public class Quiz {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String title;
+    private int quizTime;
+    private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "quizId")
@@ -42,6 +44,22 @@ public class Quiz {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuizTime() {
+        return quizTime;
+    }
+
+    public void setQuizTime(int quizTime) {
+        this.quizTime = quizTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<Question> getQuestions() {

@@ -6,8 +6,11 @@ import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.geometry.Insets;
+import javafx.geometry.Pos;
 import javafx.scene.control.*;
 import javafx.scene.input.KeyEvent;
+import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 
@@ -21,6 +24,7 @@ public class CreateQuestionController {
     private List<CheckBox> answerCheckBoxes = new ArrayList<>();
     private List<RadioButton> answerRadioButtons = new ArrayList<>();
     private InputTypeEnum inputTypeEnum = InputTypeEnum.CHECKBOX;
+    private Integer questionNumber = null;
 
     @FXML
     TextField questionNameTextField;
@@ -47,6 +51,27 @@ public class CreateQuestionController {
         }
     }
 
+    public void setParameter(Integer questionNumber, CreateQuestionRequest createQuestionRequest){
+        this.questionNumber = questionNumber;
+        this.createQuestionRequest = createQuestionRequest;
+        this.inputTypeEnum = createQuestionRequest.getInputType();
+        questionNameTextField.setText(this.createQuestionRequest.getQuestionText());
+        switch (inputTypeEnum){
+            case CHECKBOX:
+                for(int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
+                    createCheckboxesForAnswers(createQuestionRequest.getAnswers().get(i).isCorrect());
+                }
+                break;
+            case RADIO:
+                for(int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
+                    createRadioButtonsForAnswers(createQuestionRequest.getAnswers().get(i).isCorrect());
+                }
+                break;
+        }
+        tryActiveSubmit();
+        displayAnswers();
+    }
+
     @FXML
     public void onQuestionNameTyped(KeyEvent keyEvent) {
         tryActiveSubmit();
@@ -61,10 +86,10 @@ public class CreateQuestionController {
     private void onAddAnswer(ActionEvent event) {
         switch (inputTypeEnum) {
             case CHECKBOX:
-                createCheckboxesForAnswers();
+                createCheckboxesForAnswers(false);
                 break;
             case RADIO:
-                createRadioButtonsForAnswers();
+                createRadioButtonsForAnswers(false);
                 break;
         }
         createQuestionRequest.getAnswers().add(new CreateAnswerRequest(questionAnswerTextField.getText()));
@@ -84,14 +109,14 @@ public class CreateQuestionController {
         createQuestionRequest.setInputType(inputTypeEnum);
         saveCorrectAnswers();
 
-        LoadView.loadCreateQuizView(createQuestionRequest);
+        LoadView.loadCreateQuizView(questionNumber, createQuestionRequest);
     }
 
     @FXML
     private void onRadioIsRadio(ActionEvent event) {
         inputTypeEnum = InputTypeEnum.RADIO;
         for(int i = 0; i < answerCheckBoxes.size(); i++) {
-            createRadioButtonsForAnswers();
+            createRadioButtonsForAnswers(false);
         }
         answerCheckBoxes.clear();
         displayAnswers();
@@ -102,21 +127,23 @@ public class CreateQuestionController {
     private void onRadioIsCheckBox(ActionEvent event) {
         inputTypeEnum = InputTypeEnum.CHECKBOX;
         for(int i = 0; i < answerRadioButtons.size(); i++) {
-            createCheckboxesForAnswers();
+            createCheckboxesForAnswers(false);
         }
         answerRadioButtons.clear();
         displayAnswers();
         tryActiveSubmit();
     }
 
-    private void createCheckboxesForAnswers() {
+    private void createCheckboxesForAnswers(Boolean isSelected) {
         CheckBox newCheckbox = new CheckBox();
+        newCheckbox.setSelected(isSelected);
         newCheckbox.setOnAction(event -> tryActiveSubmit());
         answerCheckBoxes.add(newCheckbox);
     }
 
-    private void createRadioButtonsForAnswers() {
+    private void createRadioButtonsForAnswers(Boolean isSelected) {
         RadioButton newRadioButton = new RadioButton();
+        newRadioButton.setSelected(isSelected);
         newRadioButton.setOnAction(event -> tryActiveSubmit());
         answerRadioButtons.add(newRadioButton);
     }
@@ -125,18 +152,23 @@ public class CreateQuestionController {
         answersBox.getChildren().clear();
         ToggleGroup toggleGroup = new ToggleGroup();
         for(int i=0; i<createQuestionRequest.getAnswers().size(); i++) {
-            HBox hbox = new HBox(5);
+            BorderPane borderPane = new BorderPane();
+            styleAnswerBox(borderPane);
+            HBox leftBox = new HBox();
+            styleLeftBox(leftBox);
             Label answerLabel = new Label(i + 1 + ". " + createQuestionRequest.getAnswers().get(i).getText());
             Button deleteAnswerButton = new Button("Usuń");
             int finalI = i;
             deleteAnswerButton.setOnAction(event -> deleteAnswer(finalI));
             if(inputTypeEnum==InputTypeEnum.CHECKBOX)
-                hbox.getChildren().addAll(answerLabel, answerCheckBoxes.get(i), deleteAnswerButton);
+                leftBox.getChildren().addAll(answerLabel, answerCheckBoxes.get(i));
             else if(inputTypeEnum==InputTypeEnum.RADIO) {
                 answerRadioButtons.get(i).setToggleGroup(toggleGroup);
-                hbox.getChildren().addAll(answerLabel, answerRadioButtons.get(i), deleteAnswerButton);
+                leftBox.getChildren().addAll(answerLabel, answerRadioButtons.get(i));
             }
-            answersBox.getChildren().add(hbox);
+            borderPane.setLeft(leftBox);
+            borderPane.setRight(deleteAnswerButton);
+            answersBox.getChildren().add(borderPane);
         }
     }
 
@@ -158,16 +190,12 @@ public class CreateQuestionController {
         switch (inputTypeEnum) {
             case CHECKBOX:
                 for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                    if (answerCheckBoxes.get(i).isSelected()) {
-                        createQuestionRequest.getAnswers().get(i).setCorrect(true);
-                    }
+                        createQuestionRequest.getAnswers().get(i).setCorrect(answerCheckBoxes.get(i).isSelected());
                 }
                 break;
             case RADIO:
                 for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                    if (answerRadioButtons.get(i).isSelected()) {
-                        createQuestionRequest.getAnswers().get(i).setCorrect(true);
-                    }
+                        createQuestionRequest.getAnswers().get(i).setCorrect(answerRadioButtons.get(i).isSelected());
                 }
                 break;
         }
@@ -202,5 +230,15 @@ public class CreateQuestionController {
     private void tryActiveAddAnswerButton(){
         addAnswerButton.setDisable(questionAnswerTextField.getText() == null ||
                 questionAnswerTextField.getText().isBlank());
+    }
+
+    private void styleAnswerBox(BorderPane borderPane){
+        borderPane.setStyle("-fx-background-color: white; -fx-background-radius: 10px;");
+        borderPane.setPadding(new Insets(10, 10, 10, 10));
+    }
+
+    private void styleLeftBox(HBox leftBox){
+        leftBox.setAlignment(Pos.CENTER);
+        leftBox.setSpacing(10);
     }
 }

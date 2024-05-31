@@ -1,8 +1,6 @@
 package com.example.javapro.scene;
 
-import com.example.javapro.controller.CreateQuizController;
-import com.example.javapro.controller.JavaProQuizController;
-import com.example.javapro.controller.QuizScoreController;
+import com.example.javapro.controller.*;
 import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
@@ -21,15 +19,29 @@ public class LoadView {
         showScene(loader.root);
     }
 
-    public static void loadCreateQuizView(CreateQuestionRequest createQuestionRequest){
+    public static void loadCreateQuizView(String quizDescription){
         SceneInit.Loader loader = loadScene("view/CreateQuizView.fxml");
         CreateQuizController controller = loader.fxmlLoader.getController();
-        controller.setParameter(createQuestionRequest);
+        controller.setParameter(quizDescription);
+        showScene(loader.root);
+    }
+
+    public static void loadCreateQuizView(Integer questionNumber, CreateQuestionRequest createQuestionRequest){
+        SceneInit.Loader loader = loadScene("view/CreateQuizView.fxml");
+        CreateQuizController controller = loader.fxmlLoader.getController();
+        controller.setParameter(questionNumber, createQuestionRequest);
         showScene(loader.root);
     }
 
     public static void loadCreateQuestionView(){
         SceneInit.Loader loader = loadScene("view/CreateQuestionView.fxml");
+        showScene(loader.root);
+    }
+
+    public static void loadCreateQuestionView(Integer questionNumber, CreateQuestionRequest createQuestionRequest){
+        SceneInit.Loader loader = loadScene("view/CreateQuestionView.fxml");
+        CreateQuestionController controller = loader.fxmlLoader.getController();
+        controller.setParameter(questionNumber, createQuestionRequest);
         showScene(loader.root);
     }
 
@@ -44,6 +56,13 @@ public class LoadView {
         SceneInit.Loader loader = loadScene("view/QuizScoreView.fxml");
         QuizScoreController controller = loader.fxmlLoader.getController();
         controller.setParameter(getDetailsQuizResponse, userQuizRequest);
+        showScene(loader.root);
+    }
+
+    public static void loadAddQuizDescriptionView(String quizDescription){
+        SceneInit.Loader loader = loadScene("view/AddQuizDescriptionView.fxml");
+        AddQuizDescriptionController controller = loader.fxmlLoader.getController();
+        controller.setParameter(quizDescription);
         showScene(loader.root);
     }
 }
