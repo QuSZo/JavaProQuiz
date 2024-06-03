@@ -1,10 +1,10 @@
 package com.example.javapro.model.response.getQuiz;
 
-import java.util.UUID;
-
 public class GetQuizResponse {
     private String id;
     private String title;
+    private int quizTime;
+    private String description;
 
     public GetQuizResponse() {
     }
@@ -23,5 +23,21 @@ public class GetQuizResponse {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuizTime() {
+        return quizTime;
+    }
+
+    public void setQuizTime(int quizTime) {
+        this.quizTime = quizTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 }

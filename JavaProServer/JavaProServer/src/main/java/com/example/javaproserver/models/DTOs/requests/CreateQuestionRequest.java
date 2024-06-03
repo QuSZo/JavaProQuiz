@@ -7,6 +7,7 @@ import java.util.List;
 public class CreateQuestionRequest {
     private InputTypeEnum inputType;
     private String text;
+    private String code;
     private List<CreateAnswerRequest> answers;
 
     public CreateQuestionRequest() {
@@ -26,6 +27,14 @@ public class CreateQuestionRequest {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public List<CreateAnswerRequest> getAnswers() {

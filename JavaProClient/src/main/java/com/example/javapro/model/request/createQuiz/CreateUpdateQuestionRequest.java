@@ -1,44 +1,36 @@
-package com.example.javaproserver.models.entities;
+package com.example.javapro.model.request.createQuiz;
 
-import com.example.javaproserver.enums.InputTypeEnum;
-import jakarta.persistence.*;
+import com.example.javapro.enums.InputTypeEnum;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuestionResponse;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 
 import java.util.ArrayList;
 import java.util.List;
-import java.util.UUID;
 
-@Entity
-@Table
-public class Question {
-    @Id
-    @GeneratedValue(strategy = GenerationType.UUID)
-    private UUID id;
+public class CreateUpdateQuestionRequest {
+    private String id;
     private InputTypeEnum inputType;
     private String text;
     private String code;
+    private List<CreateUpdateAnswerRequest> answers = new ArrayList<>();
 
-    @OneToMany(cascade = CascadeType.ALL)
-    @JoinColumn(name = "questionId")
-    private List<Answer> answers;
-
-    private UUID quizId;
-
-    public Question() {
-        this.answers = new ArrayList<>();
+    public CreateUpdateQuestionRequest() {
     }
 
-    public Question(InputTypeEnum inputType, String text, String code, List<Answer> answers) {
+    public CreateUpdateQuestionRequest(String id, InputTypeEnum inputType, String text, String code, List<CreateUpdateAnswerRequest> answers) {
+        this.id = id;
         this.inputType = inputType;
         this.text = text;
         this.code = code;
         this.answers = answers;
     }
 
-    public UUID getId() {
+
+    public String getId() {
         return id;
     }
 
-    public void setId(UUID id) {
+    public void setId(String id) {
         this.id = id;
     }
 
@@ -66,11 +58,11 @@ public class Question {
         this.code = code;
     }
 
-    public List<Answer> getAnswers() {
+    public List<CreateUpdateAnswerRequest> getAnswers() {
         return answers;
     }
 
-    public void setAnswers(List<Answer> answers) {
+    public void setAnswers(List<CreateUpdateAnswerRequest> answers) {
         this.answers = answers;
     }
 }

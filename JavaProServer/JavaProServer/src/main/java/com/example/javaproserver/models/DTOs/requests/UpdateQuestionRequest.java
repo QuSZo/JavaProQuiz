@@ -9,6 +9,7 @@ public class UpdateQuestionRequest {
     private UUID id;
     private InputTypeEnum inputType;
     private String text;
+    private String code;
     private List<UpdateAnswerRequest> answers;
 
     public UpdateQuestionRequest() {
@@ -36,6 +37,14 @@ public class UpdateQuestionRequest {
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public List<UpdateAnswerRequest> getAnswers() {

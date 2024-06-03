@@ -8,26 +8,33 @@ import com.example.javapro.model.request.userQuiz.UserQuestionRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import com.example.javapro.scene.LoadView;
+import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
 
+import java.time.Duration;
+import java.time.LocalTime;
 import java.util.ArrayList;
 import java.util.List;
 
-public class JavaProQuizController {
+public class QuizSolutionController {
     private GetDetailsQuizResponse getDetailsQuizResponse;
     private UserQuizRequest userQuizRequest;
     private int questionCounter = 0;
     private List<CheckBox> answerCheckBoxes = new ArrayList<>();
     private List<RadioButton> answerRadioButtons = new ArrayList<>();
+    private AnimationTimer timer;
 
-    public JavaProQuizController() {
+    public QuizSolutionController() {
     }
 
     @FXML
     private Label questionLabel;
+    @FXML
+    private Label timerLabel;
     @FXML
     private Button previousButton;
     @FXML
@@ -36,11 +43,15 @@ public class JavaProQuizController {
     private Button submitButton;
     @FXML
     private VBox answersContainer;
+    @FXML
+    public Label questionCode;
 
     @FXML
     public void setParameter(String quizId) {
         try {
             getDetailsQuizResponse = AppHttpClient.getQuiz(quizId);
+            timer = createTimer();
+            timer.start();
         }
         catch (Exception e){
             throw new RuntimeException(e);
@@ -61,19 +72,23 @@ public class JavaProQuizController {
 
     @FXML
     public void onNextQuestion() {
+        saveCorrectAnswers();
         questionCounter++;
         displayCurrentQuestion();
     }
 
     @FXML
     public void onPreviousQuestion() {
+        saveCorrectAnswers();
         questionCounter--;
         displayCurrentQuestion();
     }
 
     @FXML
     public void onSubmit(ActionEvent event) {
-        LoadView.loadQuizScoreView(getDetailsQuizResponse, userQuizRequest);
+        timer.stop();
+        saveCorrectAnswers();
+        LoadView.loadQuizScoreView(userQuizRequest);
     }
 
     private void updateButtonVisibility() {
@@ -89,6 +104,13 @@ public class JavaProQuizController {
         GetDetailsQuestionResponse getDetailsQuestionResponse = getDetailsQuizResponse.getQuestions().get(questionCounter);
         String questionText = getDetailsQuestionResponse.getText();
         questionLabel.setText(questionText);
+
+        if(getDetailsQuestionResponse.getCode() != null) {
+            questionCode.setVisible(true);
+            questionCode.setText(getDetailsQuestionResponse.getCode());
+        }
+        else questionCode.setVisible(false);
+
         updateButtonVisibility();
         displayAnswers(getDetailsQuestionResponse);
     }
@@ -109,6 +131,7 @@ public class JavaProQuizController {
 
     private void createRadioButtons(List<GetDetailsAnswerResponse> answers){
         UserQuestionRequest currUserQuestionRequest = userQuizRequest.getQuestions().get(questionCounter);
+        answerCheckBoxes = new ArrayList<>();
 
         for(int i = 0; i < answers.size(); i++) {
             answerRadioButtons.add(new RadioButton(answers.get(i).getText()));
@@ -125,6 +148,7 @@ public class JavaProQuizController {
 
     private void createCheckboxes(List<GetDetailsAnswerResponse> answers){
         UserQuestionRequest currUserQuestionRequest = userQuizRequest.getQuestions().get(questionCounter);
+        answerCheckBoxes = new ArrayList<>();
 
         for(int i = 0; i < answers.size(); i++) {
             answerCheckBoxes.add(new CheckBox(answers.get(i).getText()));
@@ -136,5 +160,52 @@ public class JavaProQuizController {
 
             answersContainer.getChildren().add(answerCheckBoxes.get(i));
         }
+    }
+
+    private void saveCorrectAnswers(){
+        GetDetailsQuestionResponse getDetailsQuestionResponse = getDetailsQuizResponse.getQuestions().get(questionCounter);
+        UserQuestionRequest userQuestionRequest = userQuizRequest.getQuestions().get(questionCounter);
+        switch (getDetailsQuestionResponse.getInputType()) {
+            case CHECKBOX:
+                for (int i = 0; i < userQuestionRequest.getAnswers().size(); i++) {
+                    userQuestionRequest.getAnswers().get(i).setCorrect(answerCheckBoxes.get(i).isSelected());
+                }
+                break;
+            case RADIO:
+                for (int i = 0; i < userQuestionRequest.getAnswers().size(); i++) {
+                    userQuestionRequest.getAnswers().get(i).setCorrect(answerRadioButtons.get(i).isSelected());
+                }
+                break;
+        }
+    }
+
+    private AnimationTimer createTimer(){
+        LocalTime startTime = LocalTime.now();
+        LocalTime end = startTime.plusMinutes(getDetailsQuizResponse.getQuizTime());
+        return new AnimationTimer() {
+            @Override
+            public void handle(long l) {
+                Duration remaining = Duration.between(LocalTime.now(), end);
+                if (remaining.isPositive()) {
+                    timerLabel.setText(format(remaining));
+                    if(remaining.toMinutes() < 1)
+                        timerLabel.setTextFill(Color.color(1,0,0));
+                    else
+                        timerLabel.setTextFill(Color.color(0,1,0));
+                } else {
+                    timerLabel.setText(format(Duration.ZERO));
+                    stop();
+                    saveCorrectAnswers();
+                    LoadView.loadQuizScoreView(userQuizRequest);
+                }
+            }
+            private String format(Duration remaining) {
+                return String.format("%02d:%02d:%02d",
+                        remaining.toHoursPart(),
+                        remaining.toMinutesPart(),
+                        remaining.toSecondsPart()
+                );
+            }
+        };
     }
 }

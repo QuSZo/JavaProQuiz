@@ -8,14 +8,16 @@ public class GetDetailsQuestionResponse {
     private String id;
     private InputTypeEnum inputType;
     private String text;
+    private String code;
     private List<GetDetailsAnswerResponse> answers;
 
     public GetDetailsQuestionResponse(){}
 
-    public GetDetailsQuestionResponse(String id, InputTypeEnum inputType, String text, List<GetDetailsAnswerResponse> answers, List<Integer> correctAnswers) {
+    public GetDetailsQuestionResponse(String id, InputTypeEnum inputType, String text, String code, List<GetDetailsAnswerResponse> answers) {
         this.id = id;
         this.inputType = inputType;
         this.text = text;
+        this.code = code;
         this.answers = answers;
     }
 
@@ -31,12 +33,24 @@ public class GetDetailsQuestionResponse {
         return inputType;
     }
 
+    public void setInputType(InputTypeEnum inputType) {
+        this.inputType = inputType;
+    }
+
     public String getText() {
         return text;
     }
 
     public void setText(String text) {
         this.text = text;
+    }
+
+    public String getCode() {
+        return code;
+    }
+
+    public void setCode(String code) {
+        this.code = code;
     }
 
     public List<GetDetailsAnswerResponse> getAnswers() {

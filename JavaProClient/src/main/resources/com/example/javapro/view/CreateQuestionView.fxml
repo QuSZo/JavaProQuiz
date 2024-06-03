@@ -14,13 +14,15 @@
             <HBox styleClass="main-container">
                 <Label text="Treść pytania: " styleClass="main-nameLabel"/>
                 <TextField fx:id="questionNameTextField" onKeyTyped="#onQuestionNameTyped"/>
+                <Button onAction="#onAddCode" text="Dodaj kod" />
+                <Button onAction="#onAddImage" text="Dodaj zdjęcie" />
             </HBox>
             <HBox styleClass="main-container">
                 <fx:define>
                     <ToggleGroup fx:id="group" />
                 </fx:define>
                 <RadioButton fx:id="radioIsCheckBox" onAction="#onRadioIsCheckBox" text="Checkbox type" toggleGroup="$group"/>
-                <RadioButton onAction="#onRadioIsRadio" text="Radio type" toggleGroup="$group"/>
+                <RadioButton fx:id="radioIsRadio" onAction="#onRadioIsRadio" text="Radio type" toggleGroup="$group"/>
             </HBox>
             <HBox styleClass="main-container">
                 <Label text="Treść odpowiedzi: " styleClass="main-nameLabel"/>

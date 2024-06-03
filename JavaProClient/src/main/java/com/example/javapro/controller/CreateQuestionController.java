@@ -1,8 +1,9 @@
 package com.example.javapro.controller;
 
 import com.example.javapro.enums.InputTypeEnum;
-import com.example.javapro.model.request.createQuiz.CreateAnswerRequest;
-import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
+import com.example.javapro.enums.TextAreaFromViewEnum;
+import com.example.javapro.model.request.createQuiz.CreateUpdateAnswerRequest;
+import com.example.javapro.model.request.createQuiz.CreateUpdateQuestionRequest;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,11 +21,11 @@ import java.util.List;
 
 public class CreateQuestionController {
 
-    private CreateQuestionRequest createQuestionRequest = new CreateQuestionRequest();
+    static private CreateUpdateQuestionRequest createUpdateQuestionRequest = new CreateUpdateQuestionRequest();
     private List<CheckBox> answerCheckBoxes = new ArrayList<>();
     private List<RadioButton> answerRadioButtons = new ArrayList<>();
-    private InputTypeEnum inputTypeEnum = InputTypeEnum.CHECKBOX;
-    private Integer questionNumber = null;
+    static private InputTypeEnum inputTypeEnum = InputTypeEnum.CHECKBOX;
+    static private Integer questionNumber = null;
 
     @FXML
     TextField questionNameTextField;
@@ -39,6 +40,9 @@ public class CreateQuestionController {
     RadioButton radioIsCheckBox;
 
     @FXML
+    RadioButton radioIsRadio;
+
+    @FXML
     Button submitButton;
 
     @FXML
@@ -46,25 +50,58 @@ public class CreateQuestionController {
 
     @FXML
     private void initialize(){
-        if(inputTypeEnum == InputTypeEnum.CHECKBOX){
-            radioIsCheckBox.setSelected(true);
+        switch (inputTypeEnum){
+            case CHECKBOX:
+                radioIsCheckBox.setSelected(true);
+                break;
+            case RADIO:
+                radioIsRadio.setSelected(true);
+                break;
         }
     }
 
-    public void setParameter(Integer questionNumber, CreateQuestionRequest createQuestionRequest){
+    public void setParameter(Integer questionNumber, CreateUpdateQuestionRequest createUpdateQuestionRequest){
         this.questionNumber = questionNumber;
-        this.createQuestionRequest = createQuestionRequest;
-        this.inputTypeEnum = createQuestionRequest.getInputType();
-        questionNameTextField.setText(this.createQuestionRequest.getQuestionText());
+        this.createUpdateQuestionRequest = new CreateUpdateQuestionRequest(createUpdateQuestionRequest.getId(),
+                createUpdateQuestionRequest.getInputType(),
+                createUpdateQuestionRequest.getText(),
+                createUpdateQuestionRequest.getCode(),
+                new ArrayList<>(createUpdateQuestionRequest.getAnswers()));
+        this.inputTypeEnum = createUpdateQuestionRequest.getInputType();
+        questionNameTextField.setText(this.createUpdateQuestionRequest.getText());
+
         switch (inputTypeEnum){
             case CHECKBOX:
-                for(int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                    createCheckboxesForAnswers(createQuestionRequest.getAnswers().get(i).isCorrect());
+                radioIsCheckBox.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createCheckboxesForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
                 }
                 break;
             case RADIO:
-                for(int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                    createRadioButtonsForAnswers(createQuestionRequest.getAnswers().get(i).isCorrect());
+                radioIsRadio.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createRadioButtonsForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
+                }
+                break;
+        }
+        tryActiveSubmit();
+        displayAnswers();
+    }
+
+    public void setParameter(String questionCodeText){
+        createUpdateQuestionRequest.setCode(questionCodeText);
+        questionNameTextField.setText(this.createUpdateQuestionRequest.getText());
+        switch (inputTypeEnum){
+            case CHECKBOX:
+                radioIsCheckBox.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createCheckboxesForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
+                }
+                break;
+            case RADIO:
+                radioIsRadio.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createRadioButtonsForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
                 }
                 break;
         }
@@ -83,6 +120,18 @@ public class CreateQuestionController {
     }
 
     @FXML
+    public void onAddCode(ActionEvent event) {
+        createUpdateQuestionRequest.setText(questionNameTextField.getText());
+        createUpdateQuestionRequest.setInputType(inputTypeEnum);
+        saveCorrectAnswers();
+        LoadView.loadAddQuizDescriptionView(createUpdateQuestionRequest.getCode(), TextAreaFromViewEnum.CreateQuestionView);
+    }
+
+    @FXML
+    public void onAddImage(ActionEvent event) {
+    }
+
+    @FXML
     private void onAddAnswer(ActionEvent event) {
         switch (inputTypeEnum) {
             case CHECKBOX:
@@ -92,7 +141,7 @@ public class CreateQuestionController {
                 createRadioButtonsForAnswers(false);
                 break;
         }
-        createQuestionRequest.getAnswers().add(new CreateAnswerRequest(questionAnswerTextField.getText()));
+        createUpdateQuestionRequest.getAnswers().add(new CreateUpdateAnswerRequest(questionAnswerTextField.getText()));
         questionAnswerTextField.clear();
         displayAnswers();
         tryActiveSubmit();
@@ -100,16 +149,18 @@ public class CreateQuestionController {
 
     @FXML
     private void onCancel(ActionEvent event){
+        destructionOfStaticFields();
         LoadView.loadCreateQuizView();
     }
 
     @FXML
     private void onSubmit(ActionEvent event) throws IOException {
-        createQuestionRequest.setQuestionText(questionNameTextField.getText());
-        createQuestionRequest.setInputType(inputTypeEnum);
+        createUpdateQuestionRequest.setText(questionNameTextField.getText());
+        createUpdateQuestionRequest.setInputType(inputTypeEnum);
         saveCorrectAnswers();
 
-        LoadView.loadCreateQuizView(questionNumber, createQuestionRequest);
+        LoadView.loadCreateQuizView(questionNumber, createUpdateQuestionRequest);
+        destructionOfStaticFields();
     }
 
     @FXML
@@ -151,12 +202,12 @@ public class CreateQuestionController {
     private void displayAnswers(){
         answersBox.getChildren().clear();
         ToggleGroup toggleGroup = new ToggleGroup();
-        for(int i=0; i<createQuestionRequest.getAnswers().size(); i++) {
+        for(int i = 0; i< createUpdateQuestionRequest.getAnswers().size(); i++) {
             BorderPane borderPane = new BorderPane();
             styleAnswerBox(borderPane);
             HBox leftBox = new HBox();
             styleLeftBox(leftBox);
-            Label answerLabel = new Label(i + 1 + ". " + createQuestionRequest.getAnswers().get(i).getText());
+            Label answerLabel = new Label(i + 1 + ". " + createUpdateQuestionRequest.getAnswers().get(i).getText());
             Button deleteAnswerButton = new Button("Usuń");
             int finalI = i;
             deleteAnswerButton.setOnAction(event -> deleteAnswer(finalI));
@@ -181,7 +232,7 @@ public class CreateQuestionController {
                 answerRadioButtons.remove(i);
                 break;
         }
-        createQuestionRequest.getAnswers().remove(i);
+        createUpdateQuestionRequest.getAnswers().remove(i);
         displayAnswers();
         tryActiveSubmit();
     }
@@ -189,13 +240,13 @@ public class CreateQuestionController {
     private void saveCorrectAnswers(){
         switch (inputTypeEnum) {
             case CHECKBOX:
-                for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                        createQuestionRequest.getAnswers().get(i).setCorrect(answerCheckBoxes.get(i).isSelected());
+                for (int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                        createUpdateQuestionRequest.getAnswers().get(i).setCorrect(answerCheckBoxes.get(i).isSelected());
                 }
                 break;
             case RADIO:
-                for (int i = 0; i < createQuestionRequest.getAnswers().size(); i++) {
-                        createQuestionRequest.getAnswers().get(i).setCorrect(answerRadioButtons.get(i).isSelected());
+                for (int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                        createUpdateQuestionRequest.getAnswers().get(i).setCorrect(answerRadioButtons.get(i).isSelected());
                 }
                 break;
         }
@@ -222,7 +273,7 @@ public class CreateQuestionController {
 
         submitButton.setDisable(questionNameTextField.getText() == null ||
                 questionNameTextField.getText().isBlank() ||
-                createQuestionRequest.getAnswers().isEmpty() ||
+                createUpdateQuestionRequest.getAnswers().isEmpty() ||
                 !isQuestionHasCorrectAnswer
         );
     }
@@ -240,5 +291,13 @@ public class CreateQuestionController {
     private void styleLeftBox(HBox leftBox){
         leftBox.setAlignment(Pos.CENTER);
         leftBox.setSpacing(10);
+    }
+
+    private void destructionOfStaticFields(){
+        createUpdateQuestionRequest = new CreateUpdateQuestionRequest();
+        answerCheckBoxes = new ArrayList<>();
+        answerRadioButtons = new ArrayList<>();
+        inputTypeEnum = InputTypeEnum.CHECKBOX;
+        questionNumber = null;
     }
 }

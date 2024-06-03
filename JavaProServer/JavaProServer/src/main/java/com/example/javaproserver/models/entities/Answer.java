@@ -11,16 +11,16 @@ public class Answer {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private String text;
-    private boolean isCorrect;
+    private boolean correct;
 
     private UUID questionId;
 
     public Answer() {
     }
 
-    public Answer(String text, boolean isCorrect) {
+    public Answer(String text, boolean correct) {
         this.text = text;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
     }
 
     public UUID getId() {
@@ -40,10 +40,10 @@ public class Answer {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
+    public void setCorrect(boolean isCorrect) {
+        this.correct = isCorrect;
     }
 }

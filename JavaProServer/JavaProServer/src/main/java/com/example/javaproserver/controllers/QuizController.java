@@ -1,6 +1,7 @@
 package com.example.javaproserver.controllers;
 
 import com.example.javaproserver.models.DTOs.requests.CreateQuizRequest;
+import com.example.javaproserver.models.DTOs.requests.SaveUserQuizRequest;
 import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
 import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.entities.Quiz;
@@ -35,6 +36,11 @@ public class QuizController {
     @PostMapping
     public void createQuiz(@RequestBody CreateQuizRequest quiz) {
         quizService.addQuiz(quiz);
+    }
+
+    @PostMapping(path = "saveUserQuiz")
+    public int saveUserQuiz(@RequestBody SaveUserQuizRequest quiz) {
+        return quizService.saveUserQuiz(quiz);
     }
 
     @DeleteMapping(path="{quizId}")

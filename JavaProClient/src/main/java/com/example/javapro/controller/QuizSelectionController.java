@@ -41,7 +41,7 @@ public class QuizSelectionController {
 
                 public void handle(ActionEvent e)
                 {
-                    LoadView.loadQuizSolutionView(getQuizResponse.getId());
+                    LoadView.loadQuizBeforeStartView(getQuizResponse);
                 }
 
             };

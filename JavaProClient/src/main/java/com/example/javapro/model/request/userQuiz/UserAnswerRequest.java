@@ -2,14 +2,14 @@ package com.example.javapro.model.request.userQuiz;
 
 public class UserAnswerRequest {
     private String id;
-    private boolean isCorrect;
+    private boolean correct;
 
     public UserAnswerRequest() {
     }
 
-    public UserAnswerRequest(String id, boolean isCorrect) {
+    public UserAnswerRequest(String id, boolean correct) {
         this.id = id;
-        this.isCorrect = isCorrect;
+        this.correct = correct;
     }
 
     public String getId() {
@@ -21,10 +21,10 @@ public class UserAnswerRequest {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
     public void setCorrect(boolean correct) {
-        isCorrect = correct;
+        this.correct = correct;
     }
 }

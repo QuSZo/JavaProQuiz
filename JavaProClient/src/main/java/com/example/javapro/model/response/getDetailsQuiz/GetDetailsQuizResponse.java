@@ -5,6 +5,8 @@ import java.util.List;
 public class GetDetailsQuizResponse {
     private String id;
     private String title;
+    private int quizTime;
+    private String description;
     private List<GetDetailsQuestionResponse> questions;
 
     public GetDetailsQuizResponse() {
@@ -29,6 +31,22 @@ public class GetDetailsQuizResponse {
 
     public void setTitle(String title) {
         this.title = title;
+    }
+
+    public int getQuizTime() {
+        return quizTime;
+    }
+
+    public void setQuizTime(int quizTime) {
+        this.quizTime = quizTime;
+    }
+
+    public String getDescription() {
+        return description;
+    }
+
+    public void setDescription(String description) {
+        this.description = description;
     }
 
     public List<GetDetailsQuestionResponse> getQuestions() {

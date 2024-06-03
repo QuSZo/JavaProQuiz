@@ -7,7 +7,7 @@
 
 <?import javafx.scene.layout.BorderPane?>
 <?import javafx.scene.layout.HBox?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.JavaProQuizController" stylesheets="@../css/QuizSolutionView.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.QuizSolutionController" stylesheets="@../css/QuizSolutionView.css">
   <top>
     <HBox styleClass="header">
       <Label text="JavaPRO Quiz!" styleClass="header-text"/>
@@ -17,8 +17,14 @@
     <VBox styleClass="main">
       <Label fx:id="questionLabel" styleClass="main-questionLabel"/>
       <VBox fx:id="answersContainer" styleClass="main-answersBox"/>
+      <Label fx:id="questionCode" styleClass="main-questionCodeLabel" visible="false"/>
     </VBox>
   </center>
+  <right>
+    <VBox styleClass="main">
+      <Label fx:id="timerLabel" styleClass="right-timerLabel"/>
+    </VBox>
+  </right>
   <bottom>
     <HBox styleClass="footer">
       <Button fx:id="previousButton" onAction="#onPreviousQuestion" text="Poprzednie" disable="true"/>

@@ -1,9 +1,6 @@
 package com.example.javaproserver.services;
 
-import com.example.javaproserver.models.DTOs.requests.CreateQuizRequest;
-import com.example.javaproserver.models.DTOs.requests.UpdateAnswerRequest;
-import com.example.javaproserver.models.DTOs.requests.UpdateQuestionRequest;
-import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
+import com.example.javaproserver.models.DTOs.requests.*;
 import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.entities.Answer;
 import com.example.javaproserver.models.entities.Question;
@@ -15,9 +12,10 @@ import org.modelmapper.TypeToken;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.util.ArrayList;
 import java.util.List;
+import java.util.Optional;
 import java.util.UUID;
+import java.util.stream.Collectors;
 
 @Service
 public class QuizService {
@@ -46,6 +44,33 @@ public class QuizService {
         quizRepository.save(quizToAdd);
     }
 
+    public int saveUserQuiz(SaveUserQuizRequest request){
+        boolean exists = quizRepository.existsById(request.getId());
+        if (!exists) {
+            throw new IllegalArgumentException("Quiz with id " + request.getId() + " does not exist");
+        }
+
+        int score = 0;
+        Quiz quiz = quizRepository.findById(request.getId()).get();
+
+        boolean isCorrectAnswer;
+        for (Question question : quiz.getQuestions()) {
+            SaveUserQuestionRequest questionRequest = request.getQuestions().stream().filter(q -> question.getId().equals(q.getId())).findAny().orElse(null);
+            if(questionRequest != null) {
+                isCorrectAnswer = true;
+                for (Answer answer : question.getAnswers()) {
+                    SaveUserAnswerRequest answerRequest = questionRequest.getAnswers().stream().filter(a -> answer.getId().equals(a.getId())).findAny().orElse(null);
+                    if (answer.isCorrect() != answerRequest.isCorrect()) isCorrectAnswer = false;
+                }
+                if (isCorrectAnswer) {
+                    score++;
+                }
+            }
+        }
+
+        return score;
+    }
+
     public void deleteStudent(UUID id) {
         boolean exists = quizRepository.existsById(id);
         if (!exists) {
@@ -71,6 +96,7 @@ public class QuizService {
             Question question = new Question();
             question.setText(questionDTO.getText());
             question.setInputType(questionDTO.getInputType());
+            question.setCode(questionDTO.getCode());
 
             for (UpdateAnswerRequest answerDTO : questionDTO.getAnswers()) {
                 Answer answer = new Answer();

@@ -1,8 +1,10 @@
 package com.example.javapro.controller;
 
 import com.example.javapro.api.AppHttpClient;
-import com.example.javapro.model.request.createQuiz.CreateQuestionRequest;
-import com.example.javapro.model.request.createQuiz.CreateQuizRequest;
+import com.example.javapro.enums.TextAreaFromViewEnum;
+import com.example.javapro.model.request.createQuiz.CreateUpdateQuestionRequest;
+import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
+import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -20,7 +22,10 @@ import java.io.IOException;
 
 public class CreateQuizController {
 
-    static private CreateQuizRequest createQuizRequest = new CreateQuizRequest();
+    static private CreateUpdateQuizRequest createUpdateQuizRequest = new CreateUpdateQuizRequest();
+
+    public CreateQuizController() {
+    }
 
     @FXML
     private void initialize(){
@@ -33,24 +38,38 @@ public class CreateQuizController {
         });
         quizTimeTextField.setTextFormatter(textFormatter);
 
-        quizNameTextField.setText(createQuizRequest.getName());
-        quizTimeTextField.setText(String.valueOf(createQuizRequest.getQuizTime()));
+        quizNameTextField.setText(createUpdateQuizRequest.getTitle());
+        quizTimeTextField.setText(String.valueOf(createUpdateQuizRequest.getQuizTime()));
         tryActiveSubmit();
         displayQuestion();
     }
 
-    public void setParameter(Integer questionNumber, CreateQuestionRequest createQuestionRequest){
+    public void setParameter(Integer questionNumber, CreateUpdateQuestionRequest createUpdateQuestionRequest){
         if(questionNumber != null)
-            createQuizRequest.getCreateQuestionRequests().set(questionNumber, createQuestionRequest);
+            createUpdateQuizRequest.getQuestions().set(questionNumber, createUpdateQuestionRequest);
         else
-            createQuizRequest.getCreateQuestionRequests().add(createQuestionRequest);
+            createUpdateQuizRequest.getQuestions().add(createUpdateQuestionRequest);
 
         tryActiveSubmit();
         displayQuestion();
     }
 
     public void setParameter(String quizDescription){
-        createQuizRequest.setDescription(quizDescription);
+        createUpdateQuizRequest.setDescription(quizDescription);
+        tryActiveSubmit();
+        displayQuestion();
+    }
+
+    public void setId(String quizId){
+        GetDetailsQuizResponse getDetailsQuizResponse;
+        try {
+            getDetailsQuizResponse = AppHttpClient.getQuiz(quizId);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
+        createUpdateQuizRequest.mapFromGetDetailQuiz(getDetailsQuizResponse);
+        quizNameTextField.setText(createUpdateQuizRequest.getTitle());
+        quizTimeTextField.setText(String.valueOf(createUpdateQuizRequest.getQuizTime()));
         tryActiveSubmit();
         displayQuestion();
     }
@@ -79,29 +98,34 @@ public class CreateQuizController {
 
     @FXML
     private void onCreateQuestion(ActionEvent event) throws IOException {
-        createQuizRequest.setName(quizNameTextField.getText());
-        createQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
+        createUpdateQuizRequest.setTitle(quizNameTextField.getText());
+        createUpdateQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
         LoadView.loadCreateQuestionView();
     }
 
     @FXML
+    private void onEditQuizDescription(ActionEvent event) {
+        createUpdateQuizRequest.setTitle(quizNameTextField.getText());
+        createUpdateQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
+        LoadView.loadAddQuizDescriptionView(createUpdateQuizRequest.getDescription(), TextAreaFromViewEnum.CreateQuizView);
+    }
+
+    @FXML
     private void onCancel(ActionEvent event){
-        createQuizRequest = new CreateQuizRequest();
+        createUpdateQuizRequest = new CreateUpdateQuizRequest();
         LoadView.loadQuizSelectionView();
     }
 
     @FXML
     private void onSubmit(ActionEvent event) throws IOException, InterruptedException {
-        createQuizRequest.setName(quizNameTextField.getText());
-        createQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
-        AppHttpClient.createQuiz(createQuizRequest);
+        createUpdateQuizRequest.setTitle(quizNameTextField.getText());
+        createUpdateQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
+        if(createUpdateQuizRequest.getId() == null)
+            AppHttpClient.createQuiz(createUpdateQuizRequest);
+        else
+            AppHttpClient.updateQuiz(createUpdateQuizRequest);
+        createUpdateQuizRequest = new CreateUpdateQuizRequest();
         LoadView.loadQuizSelectionView();
-        createQuizRequest = new CreateQuizRequest();
-    }
-
-    @FXML
-    private void onEditQuizDescription(ActionEvent event) {
-        LoadView.loadAddQuizDescriptionView(createQuizRequest.getDescription());
     }
 
     private void tryActiveSubmit(){
@@ -109,17 +133,17 @@ public class CreateQuizController {
             quizNameTextField.getText().isBlank() ||
             quizTimeTextField.getText() == null ||
             quizTimeTextField.getText().isBlank() ||
-            createQuizRequest.getCreateQuestionRequests().isEmpty());
+            createUpdateQuizRequest.getQuestions().isEmpty());
     }
 
     private void displayQuestion(){
         questionsBox.getChildren().clear();
-        for(int i=0; i<createQuizRequest.getCreateQuestionRequests().size(); i++){
-            CreateQuestionRequest question = createQuizRequest.getCreateQuestionRequests().get(i);
+        for(int i = 0; i< createUpdateQuizRequest.getQuestions().size(); i++){
+            CreateUpdateQuestionRequest question = createUpdateQuizRequest.getQuestions().get(i);
 
             BorderPane borderPane = new BorderPane();
             styleQuestionBox(borderPane);
-            Label questionLabel = new Label(i+1 + ". " + question.getQuestionText());
+            Label questionLabel = new Label(i+1 + ". " + question.getText());
 
             HBox leftBox = new HBox();
             HBox rightBox = new HBox();
@@ -145,13 +169,13 @@ public class CreateQuizController {
     }
 
     private void deleteQuestion(int i){
-        createQuizRequest.getCreateQuestionRequests().remove(i);
+        createUpdateQuizRequest.getQuestions().remove(i);
         tryActiveSubmit();
         displayQuestion();
     }
 
     private void editQuestion(int i){
-        LoadView.loadCreateQuestionView(i, createQuizRequest.getCreateQuestionRequests().get(i));
+        LoadView.loadCreateQuestionView(i, createUpdateQuizRequest.getQuestions().get(i));
     }
 
     private void styleQuestionBox(BorderPane borderPane){

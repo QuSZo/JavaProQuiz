@@ -1,7 +1,7 @@
 package com.example.javapro.controller;
 
+import com.example.javapro.api.AppHttpClient;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
-import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
@@ -9,17 +9,24 @@ import javafx.scene.control.Label;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
 
+import java.io.IOException;
+
 public class QuizScoreController {
-    private GetDetailsQuizResponse getDetailsQuizResponse;
-    private UserQuizRequest userQuizRequest;
-    private int quizScore = 0;
+    private int quizScore;
+    private int quizTotalScore;
 
     public QuizScoreController() {
     }
 
-    public void setParameter(GetDetailsQuizResponse getDetailsQuizResponse, UserQuizRequest userQuizRequest){
-        this.getDetailsQuizResponse = getDetailsQuizResponse;
-        this.userQuizRequest = userQuizRequest;
+    public void setParameter(UserQuizRequest userQuizRequest){
+        quizTotalScore = userQuizRequest.getQuestions().size();
+        try {
+            quizScore = AppHttpClient.saveUserQuiz(userQuizRequest);
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
         displayScore();
     }
 
@@ -29,21 +36,11 @@ public class QuizScoreController {
     private VBox scoresContainer;
 
     private void displayScore(){
-        calculateScore();
-        if((double) quizScore / userQuizRequest.getQuestions().size() < 0.5)
+        if((double) quizScore / quizTotalScore < 0.5)
             scoreLabel.setTextFill(Color.color(1,0,0));
         else
             scoreLabel.setTextFill(Color.color(0,1,0));
-        scoreLabel.setText(quizScore+"/"+ userQuizRequest.getQuestions().size());
-    }
-
-    private void calculateScore(){
-//        for(int i = 0; i< userQuizRequest.getQuestions().size(); i++){
-//            List<Integer> quizzAnswers = userQuizRequest.getQuestions().get(i).getAnswers();
-//            List<Integer> correctAnswers = quizResponse.getQuestions().get(i).getCorrectAnswers();
-//            if(CollectionUtils.isEqualCollection(quizzAnswers, correctAnswers))
-//                quizScore++;
-//        }
+        scoreLabel.setText(quizScore + "/" + quizTotalScore);
     }
 
     @FXML

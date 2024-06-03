@@ -1,6 +1,7 @@
 package com.example.javapro.api;
 
-import com.example.javapro.model.request.createQuiz.CreateQuizRequest;
+import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
+import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
 import com.google.gson.Gson;
@@ -62,14 +63,46 @@ public class AppHttpClient {
         return getDetailsQuizResponse;
     }
 
-    public static void createQuiz(CreateQuizRequest createQuizRequest) throws IOException, InterruptedException {
+    public static void createQuiz(CreateUpdateQuizRequest createUpdateQuizRequest) throws IOException, InterruptedException {
         Gson gson = new Gson();
-        String jsonRequest = gson.toJson(createQuizRequest);
+        String jsonRequest = gson.toJson(createUpdateQuizRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(BASE_URL))
                 .header("Content-Type", "application/json")
                 .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> postResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static int saveUserQuiz(UserQuizRequest userQuizRequest) throws IOException, InterruptedException {
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(userQuizRequest);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL + "/saveUserQuiz"))
+                .header("Content-Type", "application/json")
+                .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> postResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        return Integer.parseInt(postResponse.body());
+    }
+
+    public static void updateQuiz(CreateUpdateQuizRequest createUpdateQuizRequest) throws IOException, InterruptedException {
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(createUpdateQuizRequest);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(BASE_URL))
+                .header("Content-Type", "application/json")
+                .method("PUT", HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();

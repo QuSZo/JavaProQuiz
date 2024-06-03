@@ -1,0 +1,30 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import java.lang.*?>
+<?import java.util.*?>
+<?import javafx.scene.*?>
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import javafx.scene.text.Text?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.QuizBeforeStartController" stylesheets="@../css/QuizBeforeStartView.css">
+    <top>
+        <HBox styleClass="header">
+            <Label text="JavaPRO Quiz!" styleClass="header-text"/>
+        </HBox>
+    </top>
+    <center>
+        <VBox styleClass="main" alignment="TOP_CENTER">
+            <Label fx:id="quizTitle" textAlignment="CENTER" styleClass="main-quizTitle"/>
+            <Label fx:id="quizTime" textAlignment="CENTER" styleClass="main-quizTime"/>
+            <Label fx:id="quizDescription" textAlignment="CENTER" styleClass="main-quizDescription"/>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Anuluj"/>
+            <Button onAction="#onSubmit" text="Rozpocznij Quiz"/>
+            <Button onAction="#onEdit" text="Edytuj Quiz"/>
+        </HBox>
+    </bottom>
+</BorderPane>

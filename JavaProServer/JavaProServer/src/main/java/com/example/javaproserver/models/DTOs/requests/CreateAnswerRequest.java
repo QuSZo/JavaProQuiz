@@ -2,17 +2,17 @@ package com.example.javaproserver.models.DTOs.requests;
 
 public class CreateAnswerRequest {
     private String text;
-    private boolean isCorrect;
+    private boolean correct;
 
     public CreateAnswerRequest() {
     }
 
     public boolean isCorrect() {
-        return isCorrect;
+        return correct;
     }
 
-    public void setCorrect(boolean correct) {
-        isCorrect = correct;
+    public void setCorrect(boolean isCorrect) {
+        this.correct = isCorrect;
     }
 
     public String getText() {

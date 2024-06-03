@@ -2,12 +2,11 @@ package com.example.javaproserver.models.DTOs.requests;
 
 import java.util.UUID;
 
-public class UpdateAnswerRequest {
+public class SaveUserAnswerRequest {
     private UUID id;
-    private String text;
     private boolean correct;
 
-    public UpdateAnswerRequest() {
+    public SaveUserAnswerRequest() {
     }
 
     public UUID getId() {
@@ -16,14 +15,6 @@ public class UpdateAnswerRequest {
 
     public void setId(UUID id) {
         this.id = id;
-    }
-
-    public String getText() {
-        return text;
-    }
-
-    public void setText(String text) {
-        this.text = text;
     }
 
     public boolean isCorrect() {
