@@ -5,6 +5,7 @@ import java.util.UUID;
 
 public class SaveUserQuizRequest {
     private UUID id;
+    private UUID userId;
     private List<SaveUserQuestionRequest> questions;
 
     public SaveUserQuizRequest() {
@@ -24,5 +25,13 @@ public class SaveUserQuizRequest {
 
     public void setQuestions(List<SaveUserQuestionRequest> questions) {
         this.questions = questions;
+    }
+
+    public UUID getUserId() {
+        return userId;
+    }
+
+    public void setUserId(UUID userId) {
+        this.userId = userId;
     }
 }

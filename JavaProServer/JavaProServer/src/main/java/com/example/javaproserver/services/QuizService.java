@@ -2,10 +2,11 @@ package com.example.javaproserver.services;
 
 import com.example.javaproserver.models.DTOs.requests.*;
 import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
-import com.example.javaproserver.models.entities.Answer;
-import com.example.javaproserver.models.entities.Question;
-import com.example.javaproserver.models.entities.Quiz;
+import com.example.javaproserver.models.DTOs.responses.GetQuizUserScoreResponse;
+import com.example.javaproserver.models.entities.*;
 import com.example.javaproserver.repositories.QuizRepository;
+import com.example.javaproserver.repositories.UserQuizScoreRepository;
+import com.example.javaproserver.repositories.UserRepository;
 import jakarta.transaction.Transactional;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.TypeToken;
@@ -21,12 +22,16 @@ import java.util.stream.Collectors;
 public class QuizService {
 
     private final QuizRepository quizRepository;
+    private final UserQuizScoreRepository userQuizScoreRepository;
     private final ModelMapper modelMapper;
+    private final UserRepository userRepository;
 
     @Autowired
-    public QuizService(QuizRepository quizRepository, ModelMapper modelMapper) {
+    public QuizService(QuizRepository quizRepository, UserQuizScoreRepository userQuizScoreRepository, ModelMapper modelMapper, UserRepository userRepository) {
         this.quizRepository = quizRepository;
+        this.userQuizScoreRepository = userQuizScoreRepository;
         this.modelMapper = modelMapper;
+        this.userRepository = userRepository;
     }
 
     public List<GetQuizResponse> getQuizzes(){
@@ -68,6 +73,17 @@ public class QuizService {
             }
         }
 
+        User user = null;
+        if(request.getUserId() != null) {
+            boolean userExists = userRepository.existsById(request.getUserId());
+            if(!userExists)
+                throw new IllegalArgumentException("User with id " + request.getUserId() + " does not exist");
+            user = userRepository.findById(request.getUserId()).get();
+        }
+
+        UserQuizScore userQuizScore = new UserQuizScore(score, quiz.getQuestions().size(), quiz, user);
+        userQuizScoreRepository.save(userQuizScore);
+
         return score;
     }
 
@@ -108,5 +124,11 @@ public class QuizService {
         }
 
         return quizRepository.save(quizToUpdate);
+    }
+
+    public List<GetQuizUserScoreResponse> getQuizzUserScores(UUID id) {
+        List<UserQuizScore> quizScores = userQuizScoreRepository.findAll().stream().filter(userQuizScore -> userQuizScore.getQuiz().getId().equals(id)).collect(Collectors.toList());
+        List<GetQuizUserScoreResponse> responses = modelMapper.map(quizScores, new TypeToken<List<GetQuizUserScoreResponse>>() {}.getType());
+        return responses;
     }
 }

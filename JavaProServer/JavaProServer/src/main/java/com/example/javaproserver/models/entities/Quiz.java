@@ -21,6 +21,9 @@ public class Quiz {
     @JoinColumn(name = "quizId")
     private List<Question> questions;
 
+    @OneToMany(fetch = FetchType.LAZY, mappedBy = "quiz", cascade = CascadeType.ALL)
+    private List<UserQuizScore> userQuizScores;
+
     public Quiz() {
         this.questions = new ArrayList<>();
     }

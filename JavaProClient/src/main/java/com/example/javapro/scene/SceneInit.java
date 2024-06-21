@@ -16,6 +16,10 @@ public class SceneInit {
         if(SceneInit.stage == null) SceneInit.stage = stage;
     }
 
+    public static Stage getStage() {
+        return stage;
+    }
+
     public static class Loader {
         public Parent root;
         public FXMLLoader fxmlLoader;

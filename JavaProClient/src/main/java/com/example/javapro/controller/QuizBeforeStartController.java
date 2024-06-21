@@ -1,11 +1,14 @@
 package com.example.javapro.controller;
 
+import com.example.javapro.auth.UserSession;
+import com.example.javapro.enums.UserRole;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
+import javafx.scene.control.Button;
 import javafx.scene.control.Label;
-import javafx.scene.text.Text;
+import javafx.scene.layout.HBox;
 
 public class QuizBeforeStartController {
 
@@ -23,6 +26,14 @@ public class QuizBeforeStartController {
     }
 
     @FXML
+    public void initialize() {
+        createButtons();
+    }
+
+    @FXML
+    public HBox footerBox;
+
+    @FXML
     public Label quizTitle;
 
     @FXML
@@ -32,17 +43,34 @@ public class QuizBeforeStartController {
     public Label quizDescription;
 
     @FXML
-    public void onSubmit(ActionEvent event) {
-        LoadView.loadQuizSolutionView(getQuizResponse.getId());
+    public void onCancel(ActionEvent event) {
+        LoadView.loadQuizSelectionView();
     }
 
-    @FXML
-    public void onEdit(ActionEvent event) {
+    private void createButtons() {
+        if(UserSession.getInstance().getUserRole() == UserRole.ADMIN){
+            Button editButton = new Button("Edytuj Quiz");
+            Button scoreButton = new Button("Wyniki");
+            editButton.setOnAction(event -> onEdit());
+            scoreButton.setOnAction(event -> onScore());
+            footerBox.getChildren().addAll(editButton, scoreButton);
+        }
+        else {
+            Button submitButton = new Button("Rozpocznij Quiz");
+            submitButton.setOnAction(event -> onSubmit());
+            footerBox.getChildren().addAll(submitButton);
+        }
+    }
+
+    public void onEdit() {
         LoadView.loadEditQuizView(getQuizResponse.getId());
     }
 
-    @FXML
-    public void onCancel(ActionEvent event) {
-        LoadView.loadQuizSelectionView();
+    public void onSubmit() {
+        LoadView.loadQuizSolutionView(getQuizResponse.getId());
+    }
+
+    public void onScore() {
+        LoadView.loadUserQuizScoresView(getQuizResponse);
     }
 }

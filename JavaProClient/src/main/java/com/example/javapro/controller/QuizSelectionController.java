@@ -1,6 +1,8 @@
 package com.example.javapro.controller;
 
 import com.example.javapro.api.AppHttpClient;
+import com.example.javapro.auth.UserSession;
+import com.example.javapro.enums.UserRole;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
 import com.example.javapro.scene.LoadView;
 import javafx.event.ActionEvent;
@@ -24,8 +26,12 @@ public class QuizSelectionController {
     }
 
     @FXML
+    public Button createQuizButton;
+
+    @FXML
     public void initialize() {
         displayQuizzes();
+        createQuizButton.setVisible(UserSession.getInstance().getUserRole() == UserRole.ADMIN);
     }
 
     @FXML

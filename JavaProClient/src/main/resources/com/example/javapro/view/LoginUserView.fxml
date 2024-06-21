@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.example.javapro.components.Header?>
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.LoginUserController" stylesheets="@../css/LoginUserView.css">
+    <top>
+        <Header />
+    </top>
+    <center>
+        <VBox styleClass="main">
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Login: " styleClass="main-label"/>
+                <TextField fx:id="loginTextField" onKeyTyped="#onLoginTyped"/>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Hasło: " styleClass="main-label"/>
+                <PasswordField fx:id="passwordTextField" onKeyTyped="#onPasswordTyped" />
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Button fx:id="loginButton" onAction="#onLogin" text="Zaloguj się" disable="true"/>
+                <VBox alignment="CENTER">
+                    <Label fx:id="errorTextField" styleClass="main-errorLabel" alignment="CENTER"/>
+                </VBox>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Nie masz konta?" styleClass="main-label"/>
+                <Button onAction="#onRegister" text="Zarejestruj się"/>
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Anuluj"/>
+        </HBox>
+    </bottom>
+    <stylesheets>
+        <URL value="@../css/global.css"/>
+    </stylesheets>
+</BorderPane>

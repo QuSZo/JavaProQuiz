@@ -1,6 +1,7 @@
 package com.example.javapro.controller;
 
 import com.example.javapro.api.AppHttpClient;
+import com.example.javapro.components.Toast;
 import com.example.javapro.enums.TextAreaFromViewEnum;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuestionRequest;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
@@ -120,10 +121,14 @@ public class CreateQuizController {
     private void onSubmit(ActionEvent event) throws IOException, InterruptedException {
         createUpdateQuizRequest.setTitle(quizNameTextField.getText());
         createUpdateQuizRequest.setQuizTime(Integer.parseInt(quizTimeTextField.getText()));
-        if(createUpdateQuizRequest.getId() == null)
+        if(createUpdateQuizRequest.getId() == null) {
             AppHttpClient.createQuiz(createUpdateQuizRequest);
-        else
+            createToast("Stworzono quiz!");
+        }
+        else {
             AppHttpClient.updateQuiz(createUpdateQuizRequest);
+            createToast("Zaktualizowano quiz!");
+        }
         createUpdateQuizRequest = new CreateUpdateQuizRequest();
         LoadView.loadQuizSelectionView();
     }
@@ -191,5 +196,12 @@ public class CreateQuizController {
     private void styleRightBox(HBox rightBox){
         rightBox.setAlignment(Pos.CENTER);
         rightBox.setSpacing(10);
+    }
+
+    private void createToast(String toastMsg) {
+        int toastMsgTime = 1500;
+        int fadeInTime = 200;
+        int fadeOutTime= 200;
+        Toast.makeText(toastMsg, toastMsgTime, fadeInTime, fadeOutTime);
     }
 }

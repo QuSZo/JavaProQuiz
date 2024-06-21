@@ -1,6 +1,7 @@
 package com.example.javapro.controller;
 
 import com.example.javapro.api.AppHttpClient;
+import com.example.javapro.auth.UserSession;
 import com.example.javapro.model.request.userQuiz.UserAnswerRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsAnswerResponse;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuestionResponse;
@@ -59,6 +60,7 @@ public class QuizSolutionController {
 
         userQuizRequest = new UserQuizRequest(
                 getDetailsQuizResponse.getId(),
+                UserSession.getInstance().getUserId(),
                 getDetailsQuizResponse.getQuestions().stream().map(getDetailsQuestionResponse ->
                         new UserQuestionRequest(
                                 getDetailsQuestionResponse.getId(),
@@ -193,7 +195,7 @@ public class QuizSolutionController {
                     else
                         timerLabel.setTextFill(Color.color(0,1,0));
                 } else {
-                    timerLabel.setText(format(Duration.ZERO));
+                    System.out.println(remaining.toMinutes());
                     stop();
                     saveCorrectAnswers();
                     LoadView.loadQuizScoreView(userQuizRequest);

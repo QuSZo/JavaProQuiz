@@ -3,11 +3,11 @@
 <?import javafx.scene.control.*?>
 <?import javafx.scene.layout.*?>
 
+<?import com.example.javapro.components.Header?>
+<?import java.net.URL?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.QuizScoreController" stylesheets="@../css/QuizScoreView.css">
     <top>
-        <HBox styleClass="header">
-            <Label text="JavaPRO Quiz!" styleClass="header-text"/>
-        </HBox>
+        <Header/>
     </top>
     <center>
         <VBox styleClass="main">
@@ -23,4 +23,7 @@
             <Button onAction="#onSubmit" text="Zatwierdź"/>
         </HBox>
     </bottom>
+    <stylesheets>
+        <URL value="@../css/global.css"/>
+    </stylesheets>
 </BorderPane>

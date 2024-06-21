@@ -4,6 +4,7 @@ import com.example.javaproserver.models.DTOs.requests.CreateQuizRequest;
 import com.example.javaproserver.models.DTOs.requests.SaveUserQuizRequest;
 import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
 import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
+import com.example.javaproserver.models.DTOs.responses.GetQuizUserScoreResponse;
 import com.example.javaproserver.models.entities.Quiz;
 import com.example.javaproserver.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -31,6 +32,11 @@ public class QuizController {
     @GetMapping(path = "{quizId}")
     public Quiz getQuizzes(@PathVariable("quizId") UUID id) {
         return quizService.getQuiz(id);
+    }
+
+    @GetMapping(path = "{quizId}/scores")
+    public List<GetQuizUserScoreResponse> getQuizzUserScores(@PathVariable("quizId") UUID id) {
+        return quizService.getQuizzUserScores(id);
     }
 
     @PostMapping

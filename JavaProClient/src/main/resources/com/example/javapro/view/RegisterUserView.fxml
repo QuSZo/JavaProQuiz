@@ -1,0 +1,54 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.control.*?>
+<?import javafx.scene.layout.*?>
+
+<?import com.example.javapro.components.Header?>
+<?import java.net.URL?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.RegisterUserController" stylesheets="@../css/RegisterUserView.css">
+    <top>
+        <Header/>
+    </top>
+    <center>
+        <VBox styleClass="main">
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Login: " styleClass="main-label"/>
+                <TextField fx:id="loginTextField" onKeyTyped="#onInputTyped"/>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Hasło: " styleClass="main-label"/>
+                <PasswordField fx:id="passwordTextField" onKeyTyped="#onInputTyped" />
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Imię: " styleClass="main-label"/>
+                <TextField fx:id="nameTextField" onKeyTyped="#onInputTyped"/>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Nazwisko: " styleClass="main-label"/>
+                <TextField fx:id="lastNameTextField" onKeyTyped="#onInputTyped"/>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Numer albumu: " styleClass="main-label"/>
+                <TextField fx:id="studentIdNumberTextField" onKeyTyped="#onInputTyped"/>
+            </HBox>
+            <HBox>
+                <Button fx:id="registerButton" onAction="#onRegister" text="Zarejestruj się" disable="true"/>
+                <VBox alignment="CENTER">
+                    <Label fx:id="errorTextField" styleClass="main-errorLabel" alignment="CENTER"/>
+                </VBox>
+            </HBox>
+            <HBox styleClass="main-labelWrapper">
+                <Label text="Masz konto?" styleClass="main-label"/>
+                <Button onAction="#onRegister" text="Zaloguj się"/>
+            </HBox>
+        </VBox>
+    </center>
+    <bottom>
+        <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Anuluj"/>
+        </HBox>
+    </bottom>
+    <stylesheets>
+        <URL value="@../css/global.css"/>
+    </stylesheets>
+</BorderPane>

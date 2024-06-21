@@ -1,9 +1,15 @@
 package com.example.javapro.api;
 
+import com.example.javapro.auth.UserSession;
+import com.example.javapro.exceptions.HttpException;
+import com.example.javapro.model.auth.JwtDto;
+import com.example.javapro.model.auth.SignInDto;
+import com.example.javapro.model.auth.SignUpDto;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
+import com.example.javapro.model.response.getQuizUserScore.GetQuizUserScoreResponse;
 import com.google.gson.Gson;
 import com.google.gson.reflect.TypeToken;
 
@@ -17,11 +23,13 @@ import java.util.List;
 
 
 public class AppHttpClient {
-    private static final String BASE_URL = "http://localhost:8080/api/v1/quiz";
+    private static final String BASE_URL = "http://localhost:8080/api/v1";
+    private static final String QUIZ_URL = BASE_URL + "/quiz";
+    private static final String AUTH_URL = BASE_URL + "/auth";
 
     public static List<GetQuizResponse> getQuizzes() throws IOException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
+                .uri(URI.create(QUIZ_URL))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
 
@@ -43,7 +51,7 @@ public class AppHttpClient {
 
     public static GetDetailsQuizResponse getQuiz(String id) throws IOException {
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/" + id))
+                .uri(URI.create(QUIZ_URL + "/" + id))
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
 
@@ -68,8 +76,9 @@ public class AppHttpClient {
         String jsonRequest = gson.toJson(createUpdateQuizRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
+                .uri(URI.create(QUIZ_URL))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + UserSession.getInstance().getToken())
                 .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
@@ -83,7 +92,7 @@ public class AppHttpClient {
         String jsonRequest = gson.toJson(userQuizRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL + "/saveUserQuiz"))
+                .uri(URI.create(QUIZ_URL + "/saveUserQuiz"))
                 .header("Content-Type", "application/json")
                 .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
@@ -100,13 +109,79 @@ public class AppHttpClient {
         String jsonRequest = gson.toJson(createUpdateQuizRequest);
 
         HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(BASE_URL))
+                .uri(URI.create(QUIZ_URL))
                 .header("Content-Type", "application/json")
+                .header("Authorization", "Bearer " + UserSession.getInstance().getToken())
                 .method("PUT", HttpRequest.BodyPublishers.ofString(jsonRequest))
                 .build();
 
         HttpClient client = HttpClient.newHttpClient();
 
         HttpResponse<String> postResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+    }
+
+    public static JwtDto signIn(SignInDto signInDto) throws IOException, InterruptedException, HttpException {
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(signInDto);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(AUTH_URL + "/signin"))
+                .header("Content-Type", "application/json")
+                .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (httpResponse.statusCode() != 200) {
+            throw new HttpException();
+        }
+
+        JwtDto jwtDto;
+        jwtDto = new Gson().fromJson(httpResponse.body(), JwtDto.class);
+
+        return jwtDto;
+    }
+
+    public static void signUp(SignUpDto signUpDto) throws IOException, InterruptedException, HttpException {
+        Gson gson = new Gson();
+        String jsonRequest = gson.toJson(signUpDto);
+
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(AUTH_URL + "/signup"))
+                .header("Content-Type", "application/json")
+                .method("POST", HttpRequest.BodyPublishers.ofString(jsonRequest))
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> httpResponse = client.send(request, HttpResponse.BodyHandlers.ofString());
+
+        if (httpResponse.statusCode() != 201) {
+            throw new HttpException();
+        }
+    }
+
+    public static List<GetQuizUserScoreResponse> getQuizUserScoreResponses(String quizId){
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(QUIZ_URL + "/" + quizId + "/scores"))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        List<GetQuizUserScoreResponse> getQuizUserScoreResponses = new ArrayList<>();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        try {
+            HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+            getQuizUserScoreResponses = new Gson().fromJson(response.body(), new TypeToken<List<GetQuizUserScoreResponse>>(){}.getType());
+        } catch (IOException e) {
+            e.printStackTrace();
+        } catch (InterruptedException e) {
+            e.printStackTrace();
+        }
+
+        return getQuizUserScoreResponses;
     }
 }

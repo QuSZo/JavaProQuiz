@@ -4,12 +4,14 @@ import java.util.List;
 
 public class UserQuizRequest {
     private String id;
+    private String userId;
     private List<UserQuestionRequest> questions;
 
     public UserQuizRequest() {}
 
-    public UserQuizRequest(String id, List<UserQuestionRequest> questions) {
+    public UserQuizRequest(String id, String userId, List<UserQuestionRequest> questions) {
         this.id = id;
+        this.userId = userId;
         this.questions = questions;
     }
     public String getId() {
@@ -23,5 +25,13 @@ public class UserQuizRequest {
     }
     public void setQuestions(List<UserQuestionRequest> questions) {
         this.questions = questions;
+    }
+
+    public String getUserId() {
+        return userId;
+    }
+
+    public void setUserId(String userId) {
+        this.userId = userId;
     }
 }
