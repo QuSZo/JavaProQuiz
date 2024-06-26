@@ -14,14 +14,11 @@
     -fx-padding: 0 0 10px 0;
 }
 
-.main-questionCodeLabel{
-    -fx-padding: 10px;
-    -fx-background-color: white;
-    -fx-background-radius: 10px;
-    -fx-font-family: Consolas;
-}
-
 .right-timerLabel{
     -fx-font-size: 18px;
     -fx-font-weight: bold;
+}
+
+.main-imageCode{
+    -fx-spacing: 10px;
 }

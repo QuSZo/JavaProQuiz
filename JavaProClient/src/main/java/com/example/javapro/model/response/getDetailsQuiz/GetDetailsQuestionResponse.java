@@ -9,15 +9,17 @@ public class GetDetailsQuestionResponse {
     private InputTypeEnum inputType;
     private String text;
     private String code;
+    private String image;
     private List<GetDetailsAnswerResponse> answers;
 
     public GetDetailsQuestionResponse(){}
 
-    public GetDetailsQuestionResponse(String id, InputTypeEnum inputType, String text, String code, List<GetDetailsAnswerResponse> answers) {
+    public GetDetailsQuestionResponse(String id, InputTypeEnum inputType, String text, String code, String image, List<GetDetailsAnswerResponse> answers) {
         this.id = id;
         this.inputType = inputType;
         this.text = text;
         this.code = code;
+        this.image = image;
         this.answers = answers;
     }
 
@@ -51,6 +53,14 @@ public class GetDetailsQuestionResponse {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public String getImage() {
+        return image;
+    }
+
+    public void setImage(String image) {
+        this.image = image;
     }
 
     public List<GetDetailsAnswerResponse> getAnswers() {

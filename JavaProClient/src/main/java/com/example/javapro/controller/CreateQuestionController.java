@@ -5,17 +5,22 @@ import com.example.javapro.enums.TextAreaFromViewEnum;
 import com.example.javapro.model.request.createQuiz.CreateUpdateAnswerRequest;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuestionRequest;
 import com.example.javapro.scene.LoadView;
+import com.example.javapro.scene.SceneInit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.input.KeyEvent;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.text.Text;
+import javafx.stage.FileChooser;
 
-import java.io.IOException;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.List;
 
@@ -28,10 +33,22 @@ public class CreateQuestionController {
     static private Integer questionNumber = null;
 
     @FXML
+    VBox codeImageBox;
+
+    @FXML
+    Text codeText;
+
+    @FXML
+    HBox buttonsCodeImages;
+
+    @FXML
     TextField questionNameTextField;
 
     @FXML
     TextField questionAnswerTextField;
+
+    @FXML
+    ImageView imageView;
 
     @FXML
     VBox answersBox;
@@ -50,14 +67,80 @@ public class CreateQuestionController {
 
     @FXML
     private void initialize(){
+//        switch (inputTypeEnum){
+//            case CHECKBOX:
+//                radioIsCheckBox.setSelected(true);
+//                break;
+//            case RADIO:
+//                radioIsRadio.setSelected(true);
+//                break;
+//        }
+        questionNameTextField.setText(this.createUpdateQuestionRequest.getText());
         switch (inputTypeEnum){
             case CHECKBOX:
                 radioIsCheckBox.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createCheckboxesForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
+                }
                 break;
             case RADIO:
                 radioIsRadio.setSelected(true);
+                for(int i = 0; i < createUpdateQuestionRequest.getAnswers().size(); i++) {
+                    createRadioButtonsForAnswers(createUpdateQuestionRequest.getAnswers().get(i).isCorrect());
+                }
                 break;
         }
+
+        if (createUpdateQuestionRequest.getImage() != null)
+            displayImage(createUpdateQuestionRequest.getImage());
+        displayCode();
+        createButtons();
+        tryActiveSubmit();
+        displayAnswers();
+    }
+
+    private void displayCode(){
+        codeText.setText(createUpdateQuestionRequest.getCode());
+        if(createUpdateQuestionRequest.getCode() != null && !createUpdateQuestionRequest.getCode().isBlank()){
+            codeImageBox.setVisible(true);
+        }
+        else
+            codeImageBox.setVisible(false);
+    }
+
+    private void createButtons(){
+        buttonsCodeImages.getChildren().clear();
+        if(createUpdateQuestionRequest.getImage() == null){
+            Button addImageButton = new Button("Dodaj zdjęcie");
+            addImageButton.setOnAction(event -> {
+                try {
+                    onAddImage();
+                } catch (IOException e) {
+                    throw new RuntimeException(e);
+                }
+            });
+            buttonsCodeImages.getChildren().add(addImageButton);
+        }
+        else {
+            Button deleteImageButton = new Button("Usuń zdjęcie");
+            deleteImageButton.setOnAction(event -> {
+                createUpdateQuestionRequest.setImage(null);
+                createButtons();
+                imageView.setImage(null);
+            });
+            buttonsCodeImages.getChildren().add(deleteImageButton);
+        }
+        if(createUpdateQuestionRequest.getCode() != null && !createUpdateQuestionRequest.getCode().isBlank()){
+            Button addCodeButton = new Button("Edytuj kod");
+            addCodeButton.setOnAction(event -> onAddCode());
+            buttonsCodeImages.getChildren().add(addCodeButton);
+        }
+        else {
+            Button editCodeButton = new Button("Dodaj kod");
+            editCodeButton.setOnAction(event -> onAddCode());
+            buttonsCodeImages.getChildren().add(editCodeButton);
+        }
+
     }
 
     public void setParameter(Integer questionNumber, CreateUpdateQuestionRequest createUpdateQuestionRequest){
@@ -66,9 +149,12 @@ public class CreateQuestionController {
                 createUpdateQuestionRequest.getInputType(),
                 createUpdateQuestionRequest.getText(),
                 createUpdateQuestionRequest.getCode(),
+                createUpdateQuestionRequest.getImage(),
                 new ArrayList<>(createUpdateQuestionRequest.getAnswers()));
         this.inputTypeEnum = createUpdateQuestionRequest.getInputType();
         questionNameTextField.setText(this.createUpdateQuestionRequest.getText());
+        if (createUpdateQuestionRequest.getImage() != null)
+            displayImage(createUpdateQuestionRequest.getImage());
 
         switch (inputTypeEnum){
             case CHECKBOX:
@@ -84,6 +170,8 @@ public class CreateQuestionController {
                 }
                 break;
         }
+        displayCode();
+        createButtons();
         tryActiveSubmit();
         displayAnswers();
     }
@@ -105,6 +193,10 @@ public class CreateQuestionController {
                 }
                 break;
         }
+        if (createUpdateQuestionRequest.getImage() != null)
+            displayImage(createUpdateQuestionRequest.getImage());
+        displayCode();
+        createButtons();
         tryActiveSubmit();
         displayAnswers();
     }
@@ -119,16 +211,31 @@ public class CreateQuestionController {
         tryActiveAddAnswerButton();
     }
 
-    @FXML
-    public void onAddCode(ActionEvent event) {
+    private void onAddCode() {
         createUpdateQuestionRequest.setText(questionNameTextField.getText());
         createUpdateQuestionRequest.setInputType(inputTypeEnum);
         saveCorrectAnswers();
         LoadView.loadAddQuizDescriptionView(createUpdateQuestionRequest.getCode(), TextAreaFromViewEnum.CreateQuestionView);
     }
 
-    @FXML
-    public void onAddImage(ActionEvent event) {
+    private void onAddImage() throws IOException {
+        FileChooser fileChooser = new FileChooser();
+        fileChooser.getExtensionFilters().add(new FileChooser.ExtensionFilter("Image Files", "*.png", "*.jpg", "*.gif"));
+        File imageFile = fileChooser.showOpenDialog(SceneInit.getStage());
+        if (imageFile != null) {
+            FileInputStream fileInputStream = new FileInputStream(imageFile);
+            byte[] imageData = fileInputStream.readAllBytes();
+            fileInputStream.close();
+            displayImage(imageData);
+            createUpdateQuestionRequest.setImage(imageData);
+        }
+        createButtons();
+    }
+
+    private void displayImage(byte[] imageData){
+        ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData);
+        Image image = new Image(byteArrayInputStream);
+        imageView.setImage(image);
     }
 
     @FXML

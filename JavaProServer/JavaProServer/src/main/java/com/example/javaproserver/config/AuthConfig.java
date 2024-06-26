@@ -34,6 +34,7 @@ public class AuthConfig {
                         .requestMatchers(HttpMethod.POST, AUTH_BLACKLIST).authenticated()
                         .requestMatchers(HttpMethod.PUT, AUTH_BLACKLIST).authenticated()
                         .requestMatchers(HttpMethod.DELETE, AUTH_BLACKLIST).authenticated()
+                        .requestMatchers(HttpMethod.GET, "/api/v1/quiz/{quizId}/scores").authenticated()
                         .anyRequest().permitAll())
                 .addFilterBefore(securityFilter, UsernamePasswordAuthenticationFilter.class)
                 .build();

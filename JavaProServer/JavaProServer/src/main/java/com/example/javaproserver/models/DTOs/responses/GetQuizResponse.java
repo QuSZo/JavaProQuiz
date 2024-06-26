@@ -6,9 +6,12 @@ public class GetQuizResponse {
     private UUID id;
     private String title;
     private int quizTime;
+    private String information;
     private String description;
+    private boolean resolve;
 
     public GetQuizResponse() {
+        this.resolve = false;
     }
 
     public UUID getId() {
@@ -35,11 +38,27 @@ public class GetQuizResponse {
         this.description = description;
     }
 
+    public String getInformation() {
+        return information;
+    }
+
+    public void setInformation(String information) {
+        this.information = information;
+    }
+
     public int getQuizTime() {
         return quizTime;
     }
 
     public void setQuizTime(int quizTime) {
         this.quizTime = quizTime;
+    }
+
+    public boolean getResolve() {
+        return resolve;
+    }
+
+    public void setResolve(boolean resolve) {
+        this.resolve = resolve;
     }
 }

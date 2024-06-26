@@ -13,7 +13,7 @@
         <VBox styleClass="main">
             <HBox styleClass="main-nameTextFieldWrapper">
                 <Label text="Nazwa: " styleClass="main-nameLabel"/>
-                <TextField fx:id="quizNameTextField" onKeyTyped="#onQuizNameTyped"/>
+                <TextField fx:id="quizNameTextField" onKeyTyped="#onQuizNameTyped" prefWidth="600"/>
             </HBox>
             <HBox styleClass="main-nameTextFieldWrapper">
                 <Label text="Czas trwania (min): " styleClass="main-nameLabel"/>
@@ -24,7 +24,7 @@
                 <Button onAction="#onEditQuizDescription" text="Opis Quizu"/>
             </HBox>
             <VBox styleClass="main-questionContainer">
-                <VBox fx:id="questionsBox" styleClass="main-questionsBox"/>
+                <ScrollPane fx:id="questionsBox" styleClass="main-questionsBox" />
             </VBox>
         </VBox>
     </center>

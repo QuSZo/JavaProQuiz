@@ -17,6 +17,7 @@
         <VBox styleClass="main" alignment="TOP_CENTER">
             <Label fx:id="quizTitle" textAlignment="CENTER" styleClass="main-quizTitle"/>
             <Label fx:id="quizTime" textAlignment="CENTER" styleClass="main-quizTime"/>
+            <Label fx:id="quizInformation" textAlignment="CENTER" styleClass="main-quizTime"/>
             <Label fx:id="quizDescription" textAlignment="CENTER" styleClass="main-quizDescription"/>
         </VBox>
     </center>

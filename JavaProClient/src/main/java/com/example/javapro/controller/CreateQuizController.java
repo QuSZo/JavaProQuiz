@@ -7,19 +7,26 @@ import com.example.javapro.model.request.createQuiz.CreateUpdateQuestionRequest;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 import com.example.javapro.scene.LoadView;
+import com.example.javapro.scene.SceneInit;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.geometry.Insets;
 import javafx.geometry.Pos;
-import javafx.scene.control.Button;
-import javafx.scene.control.Label;
-import javafx.scene.control.TextField;
-import javafx.scene.control.TextFormatter;
+import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
 import javafx.scene.layout.BorderPane;
 import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
+import javafx.scene.paint.Color;
+import javafx.scene.text.Font;
+import javafx.scene.text.Text;
 
+import java.io.ByteArrayInputStream;
 import java.io.IOException;
+import java.util.ArrayList;
+import java.util.Base64;
+import java.util.List;
 
 public class CreateQuizController {
 
@@ -85,7 +92,7 @@ public class CreateQuizController {
     public Button submitButton;
 
     @FXML
-    private VBox questionsBox;
+    private ScrollPane questionsBox;
 
     @FXML
     private void onQuizNameTyped(){
@@ -142,15 +149,46 @@ public class CreateQuizController {
     }
 
     private void displayQuestion(){
-        questionsBox.getChildren().clear();
+        questionsBox.setContent(null);
+        questionsBox.setFitToHeight(true);
+        VBox container = new VBox();
+        container.setSpacing(10);
         for(int i = 0; i< createUpdateQuizRequest.getQuestions().size(); i++){
             CreateUpdateQuestionRequest question = createUpdateQuizRequest.getQuestions().get(i);
 
             BorderPane borderPane = new BorderPane();
             styleQuestionBox(borderPane);
-            Label questionLabel = new Label(i+1 + ". " + question.getText());
+            Text questionLabel = new Text(i+1 + ". " + question.getText());
+            questionLabel.setWrappingWidth(SceneInit.getStage().getWidth() - 200);
+            List<Text> answersLabels = new ArrayList<>();
 
-            HBox leftBox = new HBox();
+            VBox answersBox = new VBox();
+            for(int j = 0; j<question.getAnswers().size(); j++){
+                Text answerLabel = new Text("- " + question.getAnswers().get(j).getText());
+                if(question.getAnswers().get(j).isCorrect()) answerLabel.setFill(Color.color(0.2, 0.7, 0.2));
+                answersLabels.add(answerLabel);
+                answersBox.getChildren().add(answersLabels.get(j));
+            }
+
+            HBox imageAndCodeContainer = new HBox();
+            if(question.getCode() != null && !question.getCode().isBlank()) {
+                Text codeLabel = new Text(question.getCode());
+                styleCodeText(codeLabel);
+                VBox codeBox = new VBox(codeLabel);
+                styleCodeBox(codeBox);
+                imageAndCodeContainer.getChildren().add(codeBox);
+            }
+            if(question.getImage() != null) {
+                ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(question.getImage());
+                Image image = new Image(byteArrayInputStream);
+                ImageView imageView = new ImageView(image);
+                imageView.setFitHeight(200);
+                imageView.setFitWidth(200);
+                imageView.setPreserveRatio(true);
+                imageAndCodeContainer.getChildren().add(imageView);
+            }
+
+            VBox leftBox = new VBox();
             HBox rightBox = new HBox();
 
             styleRightBox(rightBox);
@@ -164,13 +202,17 @@ public class CreateQuizController {
             editQuestionButton.setOnAction(event -> editQuestion(finalI));
 
             rightBox.getChildren().addAll(editQuestionButton, deleteQuestionButton);
-            leftBox.getChildren().add(questionLabel);
+//            if(question.getCode() != null && !question.getCode().isBlank())
+                leftBox.getChildren().addAll(questionLabel, answersBox, imageAndCodeContainer);
+//            else
+//                leftBox.getChildren().addAll(questionLabel, answersBox);
 
             borderPane.setLeft(leftBox);
             borderPane.setRight(rightBox);
 
-            questionsBox.getChildren().add(borderPane);
+            container.getChildren().add(borderPane);
         }
+        questionsBox.setContent(container);
     }
 
     private void deleteQuestion(int i){
@@ -188,14 +230,22 @@ public class CreateQuizController {
         borderPane.setPadding(new Insets(10, 10, 10, 10));
     }
 
-    private void styleLeftBox(HBox rightBox){
-        rightBox.setAlignment(Pos.CENTER);
+    private void styleLeftBox(VBox rightBox){
+        //rightBox.setAlignment(Pos.CENTER);
         rightBox.setSpacing(10);
     }
 
     private void styleRightBox(HBox rightBox){
         rightBox.setAlignment(Pos.CENTER);
         rightBox.setSpacing(10);
+    }
+
+    private void styleCodeBox(VBox box){
+        box.setStyle("-fx-padding: 10px 15px 10px 10px; -fx-background-color: rgb(240,240,240); -fx-background-radius: 10px; -fx-font-family: Consolas; -fx-border-insets: 0 5px 0 0; -fx-background-insets: 0 5px 0 0;");
+    }
+
+    private void styleCodeText(Text text) {
+        //text.setFont(new Font("Consolas", 12));
     }
 
     private void createToast(String toastMsg) {

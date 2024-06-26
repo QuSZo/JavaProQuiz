@@ -10,6 +10,7 @@ public class Answer {
     @Id
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
+    @Column(columnDefinition="TEXT")
     private String text;
     private boolean correct;
 

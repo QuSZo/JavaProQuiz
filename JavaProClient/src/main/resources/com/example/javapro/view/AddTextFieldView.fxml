@@ -16,6 +16,7 @@
         <HBox styleClass="footer">
             <Button onAction="#onCancel" text="Anuluj"/>
             <Button onAction="#onSubmit" text="Zatwierdź"/>
+            <Button fx:id="txtLoadButton" onAction="#onTxtLoad" text="Załaduj z pliku" visible="false"/>
         </HBox>
     </bottom>
     <stylesheets>

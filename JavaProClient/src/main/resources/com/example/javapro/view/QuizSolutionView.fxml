@@ -9,17 +9,18 @@
 <?import javafx.scene.layout.HBox?>
 <?import com.example.javapro.components.Header?>
 <?import java.net.URL?>
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.QuizSolutionController" stylesheets="@../css/QuizSolutionView.css">
   <top>
     <Header/>
   </top>
-  <center>
+  <left>
     <VBox styleClass="main">
-      <Label fx:id="questionLabel" styleClass="main-questionLabel"/>
+      <Text fx:id="questionLabel" styleClass="main-questionLabel" wrappingWidth="500"/>
       <VBox fx:id="answersContainer" styleClass="main-answersBox"/>
-      <Label fx:id="questionCode" styleClass="main-questionCodeLabel" visible="false"/>
+      <HBox fx:id="imageAndCodeContainer" styleClass="main-imageCode"/>
     </VBox>
-  </center>
+  </left>
   <right>
     <VBox styleClass="main">
       <Label fx:id="timerLabel" styleClass="right-timerLabel"/>

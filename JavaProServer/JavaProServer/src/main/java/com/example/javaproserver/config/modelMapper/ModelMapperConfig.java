@@ -1,6 +1,8 @@
 package com.example.javaproserver.config.modelMapper;
 
+import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.DTOs.responses.GetQuizUserScoreResponse;
+import com.example.javaproserver.models.entities.Quiz;
 import com.example.javaproserver.models.entities.UserQuizScore;
 import org.modelmapper.ModelMapper;
 import org.modelmapper.PropertyMap;
@@ -19,6 +21,6 @@ public class ModelMapperConfig {
         propertyMapper.addMappings(mapper -> mapper.map(src -> src.getUser().getLastName(), GetQuizUserScoreResponse::setLastName));
         propertyMapper.addMappings(mapper -> mapper.map(src -> src.getUser().getStudentIdNumber(), GetQuizUserScoreResponse::setStudentIdNumber));
 
-        return modelMapper;
+    return modelMapper;
     }
 }

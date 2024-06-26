@@ -6,10 +6,15 @@ import com.example.javaproserver.models.DTOs.requests.UpdateQuizRequest;
 import com.example.javaproserver.models.DTOs.responses.GetQuizResponse;
 import com.example.javaproserver.models.DTOs.responses.GetQuizUserScoreResponse;
 import com.example.javaproserver.models.entities.Quiz;
+import com.example.javaproserver.models.entities.User;
 import com.example.javaproserver.services.QuizService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.core.Authentication;
+import org.springframework.security.core.annotation.AuthenticationPrincipal;
 import org.springframework.web.bind.annotation.*;
 
+import java.security.Principal;
+import java.sql.SQLException;
 import java.util.List;
 import java.util.UUID;
 
@@ -55,7 +60,7 @@ public class QuizController {
     }
 
     @PutMapping()
-    public void updateQuiz(@RequestBody UpdateQuizRequest quiz) {
+    public void updateQuiz(@RequestBody UpdateQuizRequest quiz) throws SQLException {
         quizService.updateQuiz(quiz);
     }
 }

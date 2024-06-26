@@ -10,3 +10,10 @@
 .main-nameLabel{
     -fx-font-size: 16px;
 }
+
+.main-codeImageBox{
+    -fx-padding: 10px;
+    -fx-background-color: white;
+    -fx-background-radius: 10px;
+    -fx-font-family: Consolas;
+}

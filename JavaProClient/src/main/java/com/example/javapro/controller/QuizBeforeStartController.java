@@ -20,13 +20,11 @@ public class QuizBeforeStartController {
         quizTitle.setText(getQuizResponse.getTitle().toUpperCase());
         quizTime.setText("Czas: " + getQuizResponse.getQuizTime() + " min");
 
+        quizInformation.setText(getQuizResponse.getInformation());
+
         if(getQuizResponse.getDescription() == null || getQuizResponse.getDescription().isBlank())
             quizDescription.setText("Brak opisu");
         else quizDescription.setText(getQuizResponse.getDescription());
-    }
-
-    @FXML
-    public void initialize() {
         createButtons();
     }
 
@@ -43,20 +41,27 @@ public class QuizBeforeStartController {
     public Label quizDescription;
 
     @FXML
+    public Label quizInformation;
+
+    @FXML
     public void onCancel(ActionEvent event) {
         LoadView.loadQuizSelectionView();
     }
 
     private void createButtons() {
-        if(UserSession.getInstance().getUserRole() == UserRole.ADMIN){
+        if(UserSession.getInstance().getUserRole() != null && UserSession.getInstance().getUserRole().equals(UserRole.ADMIN)){
             Button editButton = new Button("Edytuj Quiz");
-            Button scoreButton = new Button("Wyniki");
             editButton.setOnAction(event -> onEdit());
-            scoreButton.setOnAction(event -> onScore());
-            footerBox.getChildren().addAll(editButton, scoreButton);
+            footerBox.getChildren().addAll(editButton);
         }
-        else {
+        if (UserSession.getInstance().getUserRole() != null && (UserSession.getInstance().getUserRole().equals(UserRole.USER) || UserSession.getInstance().getUserRole().equals(UserRole.ADMIN))){
+            Button scoreButton = new Button("Wyniki");
+            scoreButton.setOnAction(event -> onScore());
+            footerBox.getChildren().addAll(scoreButton);
+        }
+        if (UserSession.getInstance().getUserRole() == null || !UserSession.getInstance().getUserRole().equals(UserRole.ADMIN)) {
             Button submitButton = new Button("Rozpocznij Quiz");
+            submitButton.setDisable(getQuizResponse.getResolve());
             submitButton.setOnAction(event -> onSubmit());
             footerBox.getChildren().addAll(submitButton);
         }

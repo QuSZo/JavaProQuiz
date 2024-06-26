@@ -36,8 +36,6 @@ public class UserQuizScoresController {
     private void displayScores(){
         TableView table = new TableView();
 
-        //table.setEditable(false);
-
         TableColumn<GetQuizUserScoreResponse, Integer> scoreColumn = new TableColumn<>("Score");
         scoreColumn.setCellValueFactory(new PropertyValueFactory<>("score"));
 

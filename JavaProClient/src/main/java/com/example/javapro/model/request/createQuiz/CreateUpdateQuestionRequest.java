@@ -5,6 +5,7 @@ import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuestionRespo
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class CreateUpdateQuestionRequest {
@@ -12,16 +13,30 @@ public class CreateUpdateQuestionRequest {
     private InputTypeEnum inputType;
     private String text;
     private String code;
+    private byte[] image;
     private List<CreateUpdateAnswerRequest> answers = new ArrayList<>();
 
     public CreateUpdateQuestionRequest() {
     }
 
-    public CreateUpdateQuestionRequest(String id, InputTypeEnum inputType, String text, String code, List<CreateUpdateAnswerRequest> answers) {
+    public CreateUpdateQuestionRequest(String id, InputTypeEnum inputType, String text, String code, String image, List<CreateUpdateAnswerRequest> answers) {
         this.id = id;
         this.inputType = inputType;
         this.text = text;
         this.code = code;
+        if(image != null && !image.isBlank())
+            this.image = Base64.getDecoder().decode(image);
+        else
+            this.image = null;
+        this.answers = answers;
+    }
+
+    public CreateUpdateQuestionRequest(String id, InputTypeEnum inputType, String text, String code, byte[] image, List<CreateUpdateAnswerRequest> answers) {
+        this.id = id;
+        this.inputType = inputType;
+        this.text = text;
+        this.code = code;
+        this.image = image;
         this.answers = answers;
     }
 
@@ -56,6 +71,14 @@ public class CreateUpdateQuestionRequest {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public List<CreateUpdateAnswerRequest> getAnswers() {

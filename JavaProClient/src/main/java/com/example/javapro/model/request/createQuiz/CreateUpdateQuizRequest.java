@@ -4,6 +4,7 @@ import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuestionRespo
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
 
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class CreateUpdateQuizRequest {
@@ -72,6 +73,7 @@ public class CreateUpdateQuizRequest {
                         questionQuery.getInputType(),
                         questionQuery.getText(),
                         questionQuery.getCode(),
+                        questionQuery.getImage(),
                         questionQuery.getAnswers().stream().map(answerQuery ->
                                 new CreateUpdateAnswerRequest(
                                         answerQuery.getId(),

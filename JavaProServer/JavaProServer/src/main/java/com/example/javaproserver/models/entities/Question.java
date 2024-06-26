@@ -2,8 +2,14 @@ package com.example.javaproserver.models.entities;
 
 import com.example.javaproserver.enums.InputTypeEnum;
 import jakarta.persistence.*;
+import jakarta.xml.bind.DatatypeConverter;
+import org.hibernate.annotations.JdbcType;
+import org.hibernate.annotations.Type;
+import org.hibernate.type.descriptor.jdbc.VarbinaryJdbcType;
 
+import java.sql.Blob;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 import java.util.UUID;
 
@@ -14,8 +20,12 @@ public class Question {
     @GeneratedValue(strategy = GenerationType.UUID)
     private UUID id;
     private InputTypeEnum inputType;
+    @Column(columnDefinition="TEXT")
     private String text;
+    @Column(columnDefinition="TEXT")
     private String code;
+    @JdbcType(VarbinaryJdbcType.class)
+    private byte[] image;
 
     @OneToMany(cascade = CascadeType.ALL)
     @JoinColumn(name = "questionId")
@@ -27,10 +37,11 @@ public class Question {
         this.answers = new ArrayList<>();
     }
 
-    public Question(InputTypeEnum inputType, String text, String code, List<Answer> answers) {
+    public Question(InputTypeEnum inputType, String text, String code, byte[] image, List<Answer> answers) {
         this.inputType = inputType;
         this.text = text;
         this.code = code;
+        this.image = image;
         this.answers = answers;
     }
 
@@ -64,6 +75,14 @@ public class Question {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public List<Answer> getAnswers() {

@@ -15,6 +15,7 @@ public class Quiz {
     private UUID id;
     private String title;
     private int quizTime;
+    @Column(columnDefinition="TEXT")
     private String description;
 
     @OneToMany(cascade = CascadeType.ALL)
@@ -28,8 +29,10 @@ public class Quiz {
         this.questions = new ArrayList<>();
     }
 
-    public Quiz(String title, List<Question> questions) {
+    public Quiz(String title, int quizTime, String description, List<Question> questions) {
         this.title = title;
+        this.quizTime = quizTime;
+        this.description = description;
         this.questions = questions;
     }
 
@@ -71,6 +74,14 @@ public class Quiz {
 
     public void setQuestions(List<Question> questions) {
         this.questions = questions;
+    }
+
+    public List<UserQuizScore> getUserQuizScores() {
+        return userQuizScores;
+    }
+
+    public void setUserQuizScores(List<UserQuizScore> userQuizScores) {
+        this.userQuizScores = userQuizScores;
     }
 
     @Override

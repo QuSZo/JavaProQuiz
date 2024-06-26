@@ -28,10 +28,21 @@ public class AppHttpClient {
     private static final String AUTH_URL = BASE_URL + "/auth";
 
     public static List<GetQuizResponse> getQuizzes() throws IOException {
-        HttpRequest request = HttpRequest.newBuilder()
-                .uri(URI.create(QUIZ_URL))
-                .method("GET", HttpRequest.BodyPublishers.noBody())
-                .build();
+        HttpRequest request;
+        if(UserSession.getInstance().isAuthenticated()){
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(QUIZ_URL))
+                    .header("Authorization", "Bearer " + UserSession.getInstance().getToken())
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+        }
+        else {
+            request = HttpRequest.newBuilder()
+                    .uri(URI.create(QUIZ_URL))
+                    .method("GET", HttpRequest.BodyPublishers.noBody())
+                    .build();
+        }
+
 
         List<GetQuizResponse> getQuizResponse = new ArrayList<>();
 
@@ -166,6 +177,7 @@ public class AppHttpClient {
     public static List<GetQuizUserScoreResponse> getQuizUserScoreResponses(String quizId){
         HttpRequest request = HttpRequest.newBuilder()
                 .uri(URI.create(QUIZ_URL + "/" + quizId + "/scores"))
+                .header("Authorization", "Bearer " + UserSession.getInstance().getToken())
                 .method("GET", HttpRequest.BodyPublishers.noBody())
                 .build();
 

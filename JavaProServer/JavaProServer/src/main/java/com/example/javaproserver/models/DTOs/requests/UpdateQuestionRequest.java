@@ -10,6 +10,7 @@ public class UpdateQuestionRequest {
     private InputTypeEnum inputType;
     private String text;
     private String code;
+    private byte[] image;
     private List<UpdateAnswerRequest> answers;
 
     public UpdateQuestionRequest() {
@@ -45,6 +46,14 @@ public class UpdateQuestionRequest {
 
     public void setCode(String code) {
         this.code = code;
+    }
+
+    public byte[] getImage() {
+        return image;
+    }
+
+    public void setImage(byte[] image) {
+        this.image = image;
     }
 
     public List<UpdateAnswerRequest> getAnswers() {

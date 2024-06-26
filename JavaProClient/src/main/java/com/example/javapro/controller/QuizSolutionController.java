@@ -13,12 +13,18 @@ import javafx.animation.AnimationTimer;
 import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.*;
+import javafx.scene.image.Image;
+import javafx.scene.image.ImageView;
+import javafx.scene.layout.HBox;
 import javafx.scene.layout.VBox;
 import javafx.scene.paint.Color;
+import javafx.scene.text.Text;
 
+import java.io.ByteArrayInputStream;
 import java.time.Duration;
 import java.time.LocalTime;
 import java.util.ArrayList;
+import java.util.Base64;
 import java.util.List;
 
 public class QuizSolutionController {
@@ -33,7 +39,7 @@ public class QuizSolutionController {
     }
 
     @FXML
-    private Label questionLabel;
+    private Text questionLabel;
     @FXML
     private Label timerLabel;
     @FXML
@@ -45,7 +51,7 @@ public class QuizSolutionController {
     @FXML
     private VBox answersContainer;
     @FXML
-    public Label questionCode;
+    public HBox imageAndCodeContainer;
 
     @FXML
     public void setParameter(String quizId) {
@@ -107,11 +113,22 @@ public class QuizSolutionController {
         String questionText = getDetailsQuestionResponse.getText();
         questionLabel.setText(questionText);
 
-        if(getDetailsQuestionResponse.getCode() != null) {
-            questionCode.setVisible(true);
-            questionCode.setText(getDetailsQuestionResponse.getCode());
+        imageAndCodeContainer.getChildren().clear();
+        if(getDetailsQuestionResponse.getCode() != null && !getDetailsQuestionResponse.getCode().isBlank()) {
+            Label codeLabel = new Label(getDetailsQuestionResponse.getCode());
+            codeLabel.setStyle("-fx-padding: 10px; -fx-background-color: white; -fx-background-radius: 10px; -fx-font-family: Consolas;");
+            imageAndCodeContainer.getChildren().add(codeLabel);
         }
-        else questionCode.setVisible(false);
+        if(getDetailsQuestionResponse.getImage() != null && !getDetailsQuestionResponse.getImage().isBlank()) {
+            byte[] imageData = Base64.getDecoder().decode(getDetailsQuestionResponse.getImage());
+            ByteArrayInputStream byteArrayInputStream = new ByteArrayInputStream(imageData);
+            Image image = new Image(byteArrayInputStream);
+            ImageView imageView = new ImageView(image);
+            imageView.setFitHeight(300);
+            imageView.setFitWidth(300);
+            imageView.setPreserveRatio(true);
+            imageAndCodeContainer.getChildren().add(imageView);
+        }
 
         updateButtonVisibility();
         displayAnswers(getDetailsQuestionResponse);

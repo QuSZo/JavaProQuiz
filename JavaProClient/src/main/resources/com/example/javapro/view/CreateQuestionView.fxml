@@ -5,18 +5,21 @@
 
 <?import com.example.javapro.components.Header?>
 <?import java.net.URL?>
+<?import javafx.scene.image.ImageView?>
+<?import javafx.scene.text.Text?>
 <BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.CreateQuestionController" stylesheets="@../css/CreateQuestionView.css">
     <top>
         <Header/>
     </top>
     <center>
         <VBox styleClass="main">
-            <HBox styleClass="main-container">
-                <Label text="Treść pytania: " styleClass="main-nameLabel"/>
-                <TextField fx:id="questionNameTextField" onKeyTyped="#onQuestionNameTyped"/>
-                <Button onAction="#onAddCode" text="Dodaj kod" />
-                <Button onAction="#onAddImage" text="Dodaj zdjęcie" />
-            </HBox>
+            <VBox styleClass="main-container">
+                <HBox>
+                    <Label text="Treść pytania: " styleClass="main-nameLabel"/>
+                    <TextField fx:id="questionNameTextField" onKeyTyped="#onQuestionNameTyped" prefWidth="700"/>
+                </HBox>
+                <HBox fx:id="buttonsCodeImages" spacing="10"/>
+            </VBox>
             <HBox styleClass="main-container">
                 <fx:define>
                     <ToggleGroup fx:id="group" />
@@ -25,12 +28,18 @@
                 <RadioButton fx:id="radioIsRadio" onAction="#onRadioIsRadio" text="Radio type" toggleGroup="$group"/>
             </HBox>
             <HBox styleClass="main-container">
-                <Label text="Treść odpowiedzi: " styleClass="main-nameLabel"/>
-                <TextField fx:id="questionAnswerTextField" onKeyTyped="#onQuestionAnswerTyped"/>
+                <Label text="Treść odpowiedzi: " styleClass="main-nameLabel" />
+                <TextField fx:id="questionAnswerTextField" onKeyTyped="#onQuestionAnswerTyped" prefWidth="550"/>
                 <Button fx:id="addAnswerButton" onAction="#onAddAnswer" text="Dodaj odpowiedź" disable="true"/>
             </HBox>
             <VBox fx:id="answersBox" styleClass="main-container">
             </VBox>
+            <HBox>
+                <VBox fx:id="codeImageBox" styleClass="main-codeImageBox" visible="false">
+                    <Text fx:id="codeText"/>
+                </VBox>
+                <ImageView fx:id="imageView" fitWidth="300" fitHeight="300" preserveRatio="true"/>
+            </HBox>
         </VBox>
     </center>
     <bottom>
