@@ -22,6 +22,7 @@ import org.springframework.stereotype.Service;
 import javax.sql.rowset.serial.SerialBlob;
 import java.sql.Blob;
 import java.sql.SQLException;
+import java.text.DecimalFormat;
 import java.util.List;
 import java.util.Optional;
 import java.util.UUID;
@@ -146,9 +147,18 @@ public class QuizService {
         if(user.getRole().equals(UserRole.USER))
             quizScores = quizScores.filter(userQuizScore -> userQuizScore.getUser() != null && userQuizScore.getUser().getId().equals(user.getId()));
         List<UserQuizScore> quizScoresFinish = quizScores.collect(Collectors.toList());
-        List<GetQuizUserScoreResponse> responses = modelMapper.map(quizScoresFinish, new TypeToken<List<GetQuizUserScoreResponse>>() {}.getType());
+        List<GetQuizUserScoreResponse> responses = quizScoresFinish.stream().map(this::mapQuizScoreToResponse).toList();
 
         return responses;
+    }
+
+    private GetQuizUserScoreResponse mapQuizScoreToResponse(UserQuizScore quizScore) {
+        GetQuizUserScoreResponse response = modelMapper.map(quizScore, GetQuizUserScoreResponse.class);
+        DecimalFormat decimalFormat = new DecimalFormat("#.##");
+        double value = (double) quizScore.getScore() / quizScore.getFullScore()*100;
+        String valuex = decimalFormat.format(value);
+        response.setPercentageScore(valuex);
+        return response;
     }
 
     private GetQuizResponse mapQuizToGetQuizResponse(Quiz quiz){

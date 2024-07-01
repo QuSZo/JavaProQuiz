@@ -3,13 +3,10 @@ package com.example.javaproserver.seeders;
 import com.example.javaproserver.enums.InputTypeEnum;
 import com.example.javaproserver.enums.UserRole;
 import com.example.javaproserver.models.DataFromJson.ImageDecode;
-import com.example.javaproserver.models.entities.Answer;
-import com.example.javaproserver.models.entities.Question;
-import com.example.javaproserver.models.entities.Quiz;
-import com.example.javaproserver.models.entities.User;
+import com.example.javaproserver.models.entities.*;
+import com.example.javaproserver.repositories.LabRepository;
 import com.example.javaproserver.repositories.QuizRepository;
 import com.example.javaproserver.repositories.UserRepository;
-import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import jakarta.transaction.Transactional;
 import lombok.RequiredArgsConstructor;
@@ -19,9 +16,9 @@ import org.springframework.context.annotation.Configuration;
 import org.springframework.core.io.ClassPathResource;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
 
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
-import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.Base64;
 import java.util.List;
@@ -31,6 +28,7 @@ import java.util.List;
 public class Seeder implements ApplicationRunner {
     private final QuizRepository quizRepository;
     private final UserRepository userRepository;
+    private final LabRepository labRepository;
 
     @Override
     public void run(ApplicationArguments args) throws Exception {
@@ -39,6 +37,9 @@ public class Seeder implements ApplicationRunner {
         }
         if(userRepository.count() == 0) {
             seedUsers();
+        }
+        if(labRepository.count() == 0) {
+            seedLabs();
         }
     }
 
@@ -185,5 +186,13 @@ public class Seeder implements ApplicationRunner {
 
         userRepository.save(newAdmin);
         userRepository.save(newUser);
+    }
+
+    private void seedLabs() throws IOException {
+        File jsonCodeFile = new File("src/main/resources/data/lab.json");
+        ObjectMapper objectMapper = new ObjectMapper();
+        Lab lab = objectMapper.readValue(jsonCodeFile, Lab.class);
+
+        labRepository.save(lab);
     }
 }

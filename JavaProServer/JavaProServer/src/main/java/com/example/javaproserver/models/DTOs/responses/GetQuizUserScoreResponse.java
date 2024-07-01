@@ -3,7 +3,7 @@ package com.example.javaproserver.models.DTOs.responses;
 public class GetQuizUserScoreResponse {
     private int score;
     private int fullScore;
-    private int percentageScore;
+    private String percentageScore;
     private String firstName;
     private String lastName;
     private String studentIdNumber;
@@ -11,7 +11,7 @@ public class GetQuizUserScoreResponse {
     public GetQuizUserScoreResponse() {
     }
 
-    public GetQuizUserScoreResponse(int score, int fullScore, int percentageScore, String firstName, String lastName, String studentIdNumber) {
+    public GetQuizUserScoreResponse(int score, int fullScore, String percentageScore, String firstName, String lastName, String studentIdNumber) {
         this.score = score;
         this.fullScore = fullScore;
         this.percentageScore = percentageScore;
@@ -36,11 +36,11 @@ public class GetQuizUserScoreResponse {
         this.fullScore = fullScore;
     }
 
-    public int getPercentageScore() {
+    public String getPercentageScore() {
         return percentageScore;
     }
 
-    public void setPercentageScore(int percentageScore) {
+    public void setPercentageScore(String percentageScore) {
         this.percentageScore = percentageScore;
     }
 

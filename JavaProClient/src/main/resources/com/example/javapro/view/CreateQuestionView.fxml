@@ -35,10 +35,10 @@
             <VBox fx:id="answersBox" styleClass="main-container">
             </VBox>
             <HBox>
-                <VBox fx:id="codeImageBox" styleClass="main-codeImageBox" visible="false">
+                <VBox fx:id="codeImageBox" styleClass="main-codeImageBox" prefHeight="100" visible="false">
                     <Text fx:id="codeText"/>
                 </VBox>
-                <ImageView fx:id="imageView" fitWidth="300" fitHeight="300" preserveRatio="true"/>
+                <ImageView fx:id="imageView" fitWidth="100" fitHeight="200" preserveRatio="true"/>
             </HBox>
         </VBox>
     </center>

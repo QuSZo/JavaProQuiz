@@ -42,8 +42,8 @@ public class UserQuizScoresController {
         TableColumn<GetQuizUserScoreResponse, Integer> fullScoreColumn = new TableColumn<>("Full Score");
         fullScoreColumn.setCellValueFactory(new PropertyValueFactory<>("fullScore"));
 
-        TableColumn<GetQuizUserScoreResponse, Integer> percentageScoreColumn = new TableColumn<>("Percentage Score");
-        fullScoreColumn.setCellValueFactory(new PropertyValueFactory<>("percentageScore"));
+//        TableColumn<GetQuizUserScoreResponse, String> percentageScoreColumn = new TableColumn<>("Percentage Score");
+//        fullScoreColumn.setCellValueFactory(new PropertyValueFactory<>("percentageScore"));
 
         TableColumn<GetQuizUserScoreResponse, String> firstNameColumn = new TableColumn<>("First Name");
         firstNameColumn.setCellValueFactory(new PropertyValueFactory<>("firstName"));
@@ -57,6 +57,7 @@ public class UserQuizScoresController {
 
         table.getColumns().add(scoreColumn);
         table.getColumns().add(fullScoreColumn);
+//        table.getColumns().add(percentageScoreColumn);
         table.getColumns().add(firstNameColumn);
         table.getColumns().add(lastNameColumn);
         table.getColumns().add(studentIdNumberColumn);

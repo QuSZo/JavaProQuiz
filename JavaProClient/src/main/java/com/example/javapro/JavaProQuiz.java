@@ -17,7 +17,7 @@ public class JavaProQuiz extends Application {
     public void start(Stage stage) throws IOException {
         stage.setTitle("Java Quiz!");
         SceneInit.setStage(stage);
-        LoadView.loadQuizSelectionView();
+        LoadView.loadSelectJavaProAppView();
     }
     public static void main(String[] args) {
         launch(args);

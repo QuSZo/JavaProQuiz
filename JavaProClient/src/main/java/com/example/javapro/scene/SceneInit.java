@@ -54,7 +54,7 @@ public class SceneInit {
     }
 
     public static void showScene(Parent root) {
-        Scene scene = new Scene(root,900, 900);
+        Scene scene = new Scene(root,900, 700);
         stage.setScene(scene);
         stage.show();
     }

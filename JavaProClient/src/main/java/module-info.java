@@ -20,6 +20,9 @@ module com.example.javapro {
     opens com.example.javapro.model.request.userQuiz to com.google.gson;
     opens com.example.javapro.model.response.getDetailsQuiz to com.google.gson;
     opens com.example.javapro.model.response.getQuiz to com.google.gson;
+    opens com.example.javapro.model.response.getLab to com.google.gson;
+    opens com.example.javapro.model.response.getExample to com.google.gson;
+    opens com.example.javapro.model.response.getCodeFile to com.google.gson;
     opens com.example.javapro.model.response.getQuizUserScore to javafx.base, com.google.gson;
     opens com.example.javapro.model.auth to com.google.gson;
 }

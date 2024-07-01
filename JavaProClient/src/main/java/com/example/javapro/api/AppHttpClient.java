@@ -8,6 +8,7 @@ import com.example.javapro.model.auth.SignUpDto;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
+import com.example.javapro.model.response.getLab.Lab;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
 import com.example.javapro.model.response.getQuizUserScore.GetQuizUserScoreResponse;
 import com.google.gson.Gson;
@@ -20,11 +21,13 @@ import java.net.http.HttpRequest;
 import java.net.http.HttpResponse;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 
 public class AppHttpClient {
     private static final String BASE_URL = "http://localhost:8080/api/v1";
     private static final String QUIZ_URL = BASE_URL + "/quiz";
+    private static final String LAB_URL = BASE_URL + "/lab";
     private static final String AUTH_URL = BASE_URL + "/auth";
 
     public static List<GetQuizResponse> getQuizzes() throws IOException {
@@ -195,5 +198,19 @@ public class AppHttpClient {
         }
 
         return getQuizUserScoreResponses;
+    }
+
+    public static List<Lab> getLabs() throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(LAB_URL))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        List<Lab> labs = new Gson().fromJson(response.body(), new TypeToken<List<Lab>>(){}.getType());
+
+        return labs;
     }
 }

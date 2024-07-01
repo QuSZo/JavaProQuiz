@@ -121,4 +121,16 @@ public class LoadView {
         controller.setParameter(getQuizResponse);
         showScene(loader.root);
     }
+
+    public static void loadSelectJavaProAppView(){
+        enumView = EnumView.NO_DATA;
+        SceneInit.Loader loader = loadScene("view/SelectJavaProAppView.fxml");
+        showScene(loader.root);
+    }
+
+    public static void loadSelectLabView(){
+        enumView = EnumView.NO_DATA;
+        SceneInit.Loader loader = loadScene("view/SelectLabView.fxml");
+        showScene(loader.root);
+    }
 }

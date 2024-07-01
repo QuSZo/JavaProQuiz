@@ -1,0 +1,17 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<?import javafx.scene.layout.*?>
+<?import com.example.javapro.components.Header?>
+
+<?import javafx.scene.control.Button?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.SelectJavaProAppController" stylesheets="@../css/SelectJavaProAppView.css">
+    <top>
+        <Header/>
+    </top>
+    <center>
+        <VBox styleClass="main">
+            <Button onAction="#onQuiz" text="QuizJavaPro" />
+            <Button onAction="#onLab" text="LabJavaPro" />
+        </VBox>
+    </center>
+</BorderPane>
