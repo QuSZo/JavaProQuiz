@@ -5,9 +5,11 @@
       "name": "Aplikacje konsolowe – CLI Apps",
       "codeFiles": [
         {
+          "name": "1",
           "code": "/* Pierwszy program\npublic class PierwszyProgram {\n public static void main(String[] args) {\nSystem.out.println(\"Mój pierwszy program w języku Java !);\n }\n}"
         },
         {
+          "name": "2",
           "code": "public class DrugiProgram {\n public static void main(String[] args) {\n if (args.length == 0) {\n System.out.println(\"No arguments\");\n System.exit(0);\n }\n for (int i = 0; i <= args.length; i++) {\n System.out.println(\"args[\" + i + \"]:\" + args[i]);\n }\n }\n}\n"
         }
       ]
@@ -16,9 +18,11 @@
       "name": "Aplikacje z interfejsem graficznym - GUI Apps",
       "codeFiles": [
         {
+          "name": "1",
           "code": "import java.awt.event.*;\npublic class AWTDemo extends Frame {\n public AWTDemo(){\n super(\"AWT Demo\");\n prepareGUI();\n }\n public static void main(String[] args){\n AWTDemo awtDemo = new AWTDemo();\n awtDemo.setVisible(true);\n }\n private void prepareGUI(){\n setSize(800,800);\n addWindowListener(new WindowAdapter() {\n public void windowClosing(WindowEvent windowEvent){\n System.exit(0);\n }\n });\n }\n public void paint(Graphics g) {\n g.setColor(Color.RED);\n Font font = new Font(\"Serif\", Font.BOLD, 54);\n g.setFont(font);\n g.drawString(\"AWT Demo\", 50, 150);\n g.setColor(Color.BLUE);\n g.drawRect(100,200,150,150);\n g.setColor(Color.GREEN);\n g.fillRect(100,200,400,400);\n\n }\n}"
         },
         {
+          "name": "2",
           "code": "package pl.edu.prz.jprokop;\nimport java.awt.*;\npublic class SwingProgram extends JFrame {\n public SwingConstructor() {\n super(\"SwingProgram\");\n String input = JOptionPane.showInputDialog(\"Please enter your name\");\n String name = \"Hello \" + input + \" ! \";\n JLabel label = new JLabel(name, JLabel.CENTER);\n label.setFont(new Font(\"Dialog\", Font.BOLD, 50));\n label.setBackground(Color.yellow);\n label.setForeground(Color.blue);\n label.setOpaque(true);\n setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);\n add(label);\n setSize(600,400);\n //setVisible(true);\n }\n public static void main(String[] args) {\n new SwingProgram();\n }\n}"
         }
       ]

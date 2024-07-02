@@ -38,7 +38,7 @@ public class RegisterUserController {
 
     @FXML
     public void onCancel(ActionEvent event) {
-        LoadView.loadQuizSelectionView();
+        LoadView.loadSelectJavaProAppView();
     }
 
     @FXML

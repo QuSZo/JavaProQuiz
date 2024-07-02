@@ -60,4 +60,9 @@ public class QuizSelectionController {
     private void onCreateQuiz(ActionEvent event) {
         LoadView.loadCreateQuizView();
     }
+
+    @FXML
+    public void onCancel(ActionEvent event) {
+        LoadView.loadSelectJavaProAppView();
+    }
 }

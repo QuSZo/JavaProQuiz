@@ -19,6 +19,7 @@
     </center>
     <bottom>
         <HBox styleClass="footer">
+            <Button onAction="#onCancel" text="Wróć"/>
             <Button fx:id="createQuizButton" onAction="#onCreateQuiz" text="Stwórz quiz" visible="false"/>
         </HBox>
     </bottom>

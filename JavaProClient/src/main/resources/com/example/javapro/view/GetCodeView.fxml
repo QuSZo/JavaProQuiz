@@ -5,17 +5,18 @@
 
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.SelectLabController" stylesheets="@../css/SelectLabView.css">
+<?import javafx.scene.control.TextArea?>
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.GetCodeController" stylesheets="@../css/GetCodeView.css">
     <top>
         <Header/>
     </top>
     <center>
-        <VBox fx:id="optionButtonContainer" styleClass="main">
-        </VBox>
+            <TextArea fx:id="codeArea" prefHeight="500" styleClass="main"/>
     </center>
     <bottom>
         <HBox styleClass="footer">
             <Button onAction="#onCancel" text="Wróć"/>
+            <Button onAction="#onCopy" text="Skopiuj zawartość"/>
         </HBox>
     </bottom>
     <stylesheets>

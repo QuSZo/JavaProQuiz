@@ -9,14 +9,16 @@ public class Example {
     private UUID id;
     private String name;
     private List<CodeFile> codeFiles;
+    private UUID labId;
 
     public Example() {
     }
 
-    public Example(UUID id, String name, List<CodeFile> codeFiles) {
+    public Example(UUID id, String name, List<CodeFile> codeFiles, UUID labId) {
         this.id = id;
         this.name = name;
         this.codeFiles = codeFiles;
+        this.labId = labId;
     }
 
     public UUID getId() {
@@ -41,5 +43,13 @@ public class Example {
 
     public void setCodeFiles(List<CodeFile> codeFiles) {
         this.codeFiles = codeFiles;
+    }
+
+    public UUID getLabId() {
+        return labId;
+    }
+
+    public void setLabId(UUID labId) {
+        this.labId = labId;
     }
 }

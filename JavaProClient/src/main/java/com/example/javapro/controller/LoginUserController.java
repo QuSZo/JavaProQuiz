@@ -35,7 +35,7 @@ public class LoginUserController {
 
     @FXML
     public void onCancel(ActionEvent event) {
-        LoadView.loadQuizSelectionView();
+        LoadView.loadSelectJavaProAppView();
     }
 
     @FXML
@@ -57,7 +57,7 @@ public class LoginUserController {
             UserSession.getInstance().setToken(jwtDto.accessToken());
             UserSession.getInstance().setUserRole(jwtDto.userRole());
             UserSession.getInstance().setUserId(jwtDto.userId());
-            LoadView.loadQuizSelectionView();
+            LoadView.loadSelectJavaProAppView();
             createToast();
         }
         catch (HttpException e) {

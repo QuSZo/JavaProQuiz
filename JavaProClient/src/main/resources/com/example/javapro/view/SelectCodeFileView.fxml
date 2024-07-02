@@ -5,7 +5,7 @@
 
 <?import javafx.scene.control.Button?>
 <?import java.net.URL?>
-<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.SelectLabController" stylesheets="@../css/SelectLabView.css">
+<BorderPane xmlns:fx="http://javafx.com/fxml" fx:controller="com.example.javapro.controller.SelectCodeFileController" stylesheets="@../css/SelectCodeFileView.css">
     <top>
         <Header/>
     </top>

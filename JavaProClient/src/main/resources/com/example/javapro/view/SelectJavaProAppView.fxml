@@ -9,9 +9,9 @@
         <Header/>
     </top>
     <center>
-        <VBox styleClass="main">
+        <HBox styleClass="main">
             <Button onAction="#onQuiz" text="QuizJavaPro" />
-            <Button onAction="#onLab" text="LabJavaPro" />
-        </VBox>
+            <Button onAction="#onLab" text="CodeJavaPro" />
+        </HBox>
     </center>
 </BorderPane>

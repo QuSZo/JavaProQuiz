@@ -7,7 +7,9 @@ import com.example.javapro.model.auth.SignInDto;
 import com.example.javapro.model.auth.SignUpDto;
 import com.example.javapro.model.request.createQuiz.CreateUpdateQuizRequest;
 import com.example.javapro.model.request.userQuiz.UserQuizRequest;
+import com.example.javapro.model.response.getCodeFile.CodeFile;
 import com.example.javapro.model.response.getDetailsQuiz.GetDetailsQuizResponse;
+import com.example.javapro.model.response.getExample.Example;
 import com.example.javapro.model.response.getLab.Lab;
 import com.example.javapro.model.response.getQuiz.GetQuizResponse;
 import com.example.javapro.model.response.getQuizUserScore.GetQuizUserScoreResponse;
@@ -212,5 +214,46 @@ public class AppHttpClient {
         List<Lab> labs = new Gson().fromJson(response.body(), new TypeToken<List<Lab>>(){}.getType());
 
         return labs;
+    }
+
+    public static List<Example> getExamples(UUID id) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(LAB_URL + "/" + id + "/examples"))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        List<Example> examples = new Gson().fromJson(response.body(), new TypeToken<List<Example>>(){}.getType());
+
+        return examples;
+    }
+
+    public static List<CodeFile> getCodeFiles(UUID exampleId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(LAB_URL + "/example/" + exampleId + "/files"))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        List<CodeFile> codeFiles = new Gson().fromJson(response.body(), new TypeToken<List<CodeFile>>(){}.getType());
+
+        return codeFiles;
+    }
+
+    public static CodeFile getCodeFile(UUID codeFileId) throws IOException, InterruptedException {
+        HttpRequest request = HttpRequest.newBuilder()
+                .uri(URI.create(LAB_URL + "/example/file/" + codeFileId))
+                .method("GET", HttpRequest.BodyPublishers.noBody())
+                .build();
+
+        HttpClient client = HttpClient.newHttpClient();
+
+        HttpResponse<String> response = client.send(request, HttpResponse.BodyHandlers.ofString());
+        CodeFile codeFile = new Gson().fromJson(response.body(), CodeFile.class);
+        return codeFile;
     }
 }

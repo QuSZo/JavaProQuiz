@@ -7,6 +7,7 @@ import com.example.javapro.scene.LoadView;
 import javafx.fxml.FXML;
 import javafx.fxml.FXMLLoader;
 import javafx.scene.control.Button;
+import javafx.scene.control.Label;
 import javafx.scene.layout.AnchorPane;
 import javafx.scene.layout.HBox;
 
@@ -15,6 +16,9 @@ import java.io.IOException;
 public class Header extends AnchorPane {
     @FXML
     private Button loginButton;
+
+    @FXML
+    private Label headerTitle;
 
     public Header() {
         loadView();
@@ -35,7 +39,19 @@ public class Header extends AnchorPane {
     }
 
     private void createView() {
-        if(LoadView.enumView != EnumView.QUIZ_SELECTION_VIEW)
+        if(LoadView.enumView == EnumView.NO_DATA || LoadView.enumView == EnumView.NO_DATA_LOGIN){
+            headerTitle.setText("JavaPro");
+        }
+        else if(LoadView.enumView == EnumView.QUIZ_VIEW || LoadView.enumView == EnumView.QUIZ_VIEW_LOGIN){
+            headerTitle.setText("JavaPro Quiz");
+        }
+        else if(LoadView.enumView == EnumView.LAB_VIEW_LOGIN){
+            headerTitle.setText("JavaPro Code");
+        }
+
+        if(LoadView.enumView != EnumView.QUIZ_VIEW_LOGIN &&
+        LoadView.enumView != EnumView.LAB_VIEW_LOGIN &&
+        LoadView.enumView != EnumView.NO_DATA_LOGIN)
             loginButton.setVisible(false);
         else {
             if (UserSession.getInstance().isAuthenticated()) {
@@ -51,7 +67,7 @@ public class Header extends AnchorPane {
 
     private void onLogout() {
         UserSession.getInstance().removeToken();
-        LoadView.loadQuizSelectionView();
+        LoadView.loadSelectJavaProAppView();
         createToast();
     }
 

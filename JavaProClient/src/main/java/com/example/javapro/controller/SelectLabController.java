@@ -2,6 +2,8 @@ package com.example.javapro.controller;
 
 import com.example.javapro.api.AppHttpClient;
 import com.example.javapro.model.response.getLab.Lab;
+import com.example.javapro.scene.LoadView;
+import javafx.event.ActionEvent;
 import javafx.fxml.FXML;
 import javafx.scene.control.Button;
 import javafx.scene.layout.VBox;
@@ -32,6 +34,11 @@ public class SelectLabController {
     }
 
     private void loadExamples(UUID id) {
+        LoadView.loadSelectExampleView(id);
+    }
 
+    @FXML
+    public void onCancel(ActionEvent event) {
+        LoadView.loadSelectJavaProAppView();
     }
 }
